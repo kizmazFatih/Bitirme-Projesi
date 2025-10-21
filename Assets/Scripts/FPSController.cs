@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,11 +6,19 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class FPSController : MonoBehaviour
 {
+    private Animator animator;
 
+    public PlayerInputs playerInputs;
     private Vector2 _input;
     private CharacterController _characterController;
     private Vector3 _direction;
-    [SerializeField] private float speed;
+
+    private bool isRunning = false;
+
+    float currentSpeed;
+    [SerializeField] private float backwardSpeed = 3f;
+    [SerializeField] private float walkSpeed = 5f;
+    [SerializeField] private float runSpeed = 10f;
     [SerializeField] private float smoothTime = 0.05f;
 
 
@@ -23,13 +29,29 @@ public class FPSController : MonoBehaviour
     private float _velocity;
 
 
+
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+
+        SetInputs();
+
+
+    }
+    void SetInputs()
+    {
+        playerInputs = new PlayerInputs();
+        playerInputs.Movement.Enable();
+
+        playerInputs.Movement.Move.performed += ctx => GetMoveInputs();
+        playerInputs.Movement.LeftShift.started += ctx => isRunning = true;
+        playerInputs.Movement.LeftShift.canceled += ctx => isRunning = false;
     }
 
     private void Update()
     {
+        GetMoveInputs();
         ApplyGravity();
         ApplyRotation();
         ApplyMovement();
@@ -60,17 +82,36 @@ public class FPSController : MonoBehaviour
 
     private void ApplyMovement()
     {
-        _characterController.Move(((_direction.z * transform.forward) + (_direction.x * transform.right) + (_direction.y * Vector3.up)) * speed * Time.deltaTime);
+        _characterController.Move(((_direction.z * transform.forward) + (_direction.x * transform.right) + (_direction.y * Vector3.up)) * currentSpeed * Time.deltaTime);
     }
 
 
 
     #region Input
-    public void Move(InputAction.CallbackContext context)
+    public void GetMoveInputs()
     {
-        _input = context.ReadValue<Vector2>();
+        _input = playerInputs.Movement.Move.ReadValue<Vector2>();
         _direction = new Vector3(_input.x, 0.0f, _input.y);
 
+        SetSpeed();
+    }
+    public void SetSpeed()
+    {
+        if (_direction.z < 0)
+        {
+            walkSpeed = backwardSpeed;
+            runSpeed = backwardSpeed;
+        }
+        else
+        {
+            walkSpeed = 5f;
+            runSpeed = 10f;
+        }
+        currentSpeed = isRunning ? runSpeed : walkSpeed;
+
+
+        animator.SetFloat("Speed", (_direction.magnitude * currentSpeed) / 10);
     }
     #endregion
 }
+
