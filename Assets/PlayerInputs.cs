@@ -192,6 +192,60 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Tab"",
+                    ""type"": ""Button"",
+                    ""id"": ""2255b435-6e57-4da4-8e26-cc240ba2e406"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""d53e06ce-1fc2-446f-8365-a43ae090366a"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Number1"",
+                    ""type"": ""Button"",
+                    ""id"": ""4901d4be-e146-4f27-a16c-b169930ec941"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Number2"",
+                    ""type"": ""Button"",
+                    ""id"": ""2c27ae8c-69d5-4a0c-a604-98eb74db710e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Number3"",
+                    ""type"": ""Button"",
+                    ""id"": ""a52e7667-541a-4638-a1ff-acf02f59c204"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Number4"",
+                    ""type"": ""Button"",
+                    ""id"": ""51118737-69cf-448e-b037-188654d86abd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -203,6 +257,72 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff8c7094-14f5-43c9-b1d3-f587c8f3c7aa"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Tab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16aa8e2a-8c99-4c0e-937c-8fff6b50a1b4"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bef70d9b-b74a-4e63-a9a3-0e0ec01484b9"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Number1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf63dffa-2166-44bb-8010-9c96ac815bdd"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Number2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da617394-7a9c-4906-9293-873798d6b299"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Number3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2019ec92-390b-4afc-af58-321f5cad5a71"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Number4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -218,6 +338,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         // Interaction
         m_Interaction = asset.FindActionMap("Interaction", throwIfNotFound: true);
         m_Interaction_Interact = m_Interaction.FindAction("Interact", throwIfNotFound: true);
+        m_Interaction_Tab = m_Interaction.FindAction("Tab", throwIfNotFound: true);
+        m_Interaction_Scroll = m_Interaction.FindAction("Scroll", throwIfNotFound: true);
+        m_Interaction_Number1 = m_Interaction.FindAction("Number1", throwIfNotFound: true);
+        m_Interaction_Number2 = m_Interaction.FindAction("Number2", throwIfNotFound: true);
+        m_Interaction_Number3 = m_Interaction.FindAction("Number3", throwIfNotFound: true);
+        m_Interaction_Number4 = m_Interaction.FindAction("Number4", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -407,6 +533,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Interaction;
     private List<IInteractionActions> m_InteractionActionsCallbackInterfaces = new List<IInteractionActions>();
     private readonly InputAction m_Interaction_Interact;
+    private readonly InputAction m_Interaction_Tab;
+    private readonly InputAction m_Interaction_Scroll;
+    private readonly InputAction m_Interaction_Number1;
+    private readonly InputAction m_Interaction_Number2;
+    private readonly InputAction m_Interaction_Number3;
+    private readonly InputAction m_Interaction_Number4;
     /// <summary>
     /// Provides access to input actions defined in input action map "Interaction".
     /// </summary>
@@ -422,6 +554,30 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Interaction/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Interaction_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "Interaction/Tab".
+        /// </summary>
+        public InputAction @Tab => m_Wrapper.m_Interaction_Tab;
+        /// <summary>
+        /// Provides access to the underlying input action "Interaction/Scroll".
+        /// </summary>
+        public InputAction @Scroll => m_Wrapper.m_Interaction_Scroll;
+        /// <summary>
+        /// Provides access to the underlying input action "Interaction/Number1".
+        /// </summary>
+        public InputAction @Number1 => m_Wrapper.m_Interaction_Number1;
+        /// <summary>
+        /// Provides access to the underlying input action "Interaction/Number2".
+        /// </summary>
+        public InputAction @Number2 => m_Wrapper.m_Interaction_Number2;
+        /// <summary>
+        /// Provides access to the underlying input action "Interaction/Number3".
+        /// </summary>
+        public InputAction @Number3 => m_Wrapper.m_Interaction_Number3;
+        /// <summary>
+        /// Provides access to the underlying input action "Interaction/Number4".
+        /// </summary>
+        public InputAction @Number4 => m_Wrapper.m_Interaction_Number4;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -451,6 +607,24 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Tab.started += instance.OnTab;
+            @Tab.performed += instance.OnTab;
+            @Tab.canceled += instance.OnTab;
+            @Scroll.started += instance.OnScroll;
+            @Scroll.performed += instance.OnScroll;
+            @Scroll.canceled += instance.OnScroll;
+            @Number1.started += instance.OnNumber1;
+            @Number1.performed += instance.OnNumber1;
+            @Number1.canceled += instance.OnNumber1;
+            @Number2.started += instance.OnNumber2;
+            @Number2.performed += instance.OnNumber2;
+            @Number2.canceled += instance.OnNumber2;
+            @Number3.started += instance.OnNumber3;
+            @Number3.performed += instance.OnNumber3;
+            @Number3.canceled += instance.OnNumber3;
+            @Number4.started += instance.OnNumber4;
+            @Number4.performed += instance.OnNumber4;
+            @Number4.canceled += instance.OnNumber4;
         }
 
         /// <summary>
@@ -465,6 +639,24 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Tab.started -= instance.OnTab;
+            @Tab.performed -= instance.OnTab;
+            @Tab.canceled -= instance.OnTab;
+            @Scroll.started -= instance.OnScroll;
+            @Scroll.performed -= instance.OnScroll;
+            @Scroll.canceled -= instance.OnScroll;
+            @Number1.started -= instance.OnNumber1;
+            @Number1.performed -= instance.OnNumber1;
+            @Number1.canceled -= instance.OnNumber1;
+            @Number2.started -= instance.OnNumber2;
+            @Number2.performed -= instance.OnNumber2;
+            @Number2.canceled -= instance.OnNumber2;
+            @Number3.started -= instance.OnNumber3;
+            @Number3.performed -= instance.OnNumber3;
+            @Number3.canceled -= instance.OnNumber3;
+            @Number4.started -= instance.OnNumber4;
+            @Number4.performed -= instance.OnNumber4;
+            @Number4.canceled -= instance.OnNumber4;
         }
 
         /// <summary>
@@ -534,5 +726,47 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Tab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTab(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Scroll" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnScroll(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Number1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNumber1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Number2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNumber2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Number3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNumber3(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Number4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNumber4(InputAction.CallbackContext context);
     }
 }

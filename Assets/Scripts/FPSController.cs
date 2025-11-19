@@ -1,4 +1,3 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,9 +15,9 @@ public class FPSController : MonoBehaviour
     private bool isRunning = false;
 
     float currentSpeed;
-    [SerializeField] private float backwardSpeed = 3f;
-    [SerializeField] private float walkSpeed = 5f;
-    [SerializeField] private float runSpeed = 10f;
+    [SerializeField] private float backwardSpeed ;
+    [SerializeField] private float walkSpeed ;
+    [SerializeField] private float runSpeed ;
     [SerializeField] private float smoothTime = 0.05f;
 
 
@@ -32,12 +31,11 @@ public class FPSController : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         _characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-
+ 
         SetInputs();
-
-
     }
     void SetInputs()
     {
@@ -71,7 +69,6 @@ public class FPSController : MonoBehaviour
         }
         _direction.y = _velocity;
     }
-
     private void ApplyRotation()
     {
 
@@ -79,14 +76,10 @@ public class FPSController : MonoBehaviour
         transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
 
     }
-
     private void ApplyMovement()
     {
         _characterController.Move(((_direction.z * transform.forward) + (_direction.x * transform.right) + (_direction.y * Vector3.up)) * currentSpeed * Time.deltaTime);
     }
-
-
-
     #region Input
     public void GetMoveInputs()
     {
@@ -98,19 +91,17 @@ public class FPSController : MonoBehaviour
     public void SetSpeed()
     {
         if (_direction.z < 0)
-        {
-            walkSpeed = backwardSpeed;
-            runSpeed = backwardSpeed;
-        }
+        {   walkSpeed = backwardSpeed;
+            runSpeed = backwardSpeed;}
         else
         {
-            walkSpeed = 5f;
-            runSpeed = 10f;
+            walkSpeed = 3f;
+            runSpeed = 6f;
         }
         currentSpeed = isRunning ? runSpeed : walkSpeed;
 
 
-        animator.SetFloat("Speed", (_direction.magnitude * currentSpeed) / 10);
+        animator.SetFloat("Speed", (_direction.magnitude * currentSpeed) / runSpeed);
     }
     #endregion
 }
