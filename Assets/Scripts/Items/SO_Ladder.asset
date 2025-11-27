@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SO_Ladder
   m_EditorClassIdentifier: 
   isPlaceable: 0
-  my_image: {fileID: 2800000, guid: 85ac55597b97403c82fc6601a93cf241, type: 3}
-  my_prefab: {fileID: 8834098469695568914, guid: 8c78df917778869488f6db188346de28, type: 3}
+  my_image: {fileID: 2800000, guid: 1080dd9d4ba894b44bff32c5ab0d5a6b, type: 3}
+  my_prefab: {fileID: 5113631577948556890, guid: e92520afe94b5c34bb5c6de7a206a90d, type: 3}
   my_amount: 1
   max_stack: 1

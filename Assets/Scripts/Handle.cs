@@ -26,10 +26,11 @@ public class Handle : MonoBehaviour
     private Camera cam;
 
     [SerializeField] private float rayDistance;
-    [SerializeField] private LayerMask ignoreLayer;
+    [SerializeField] private LayerMask GroundLayer;
 
     private MeshRenderer visualMeshRenderer;
     private GameObject visual;
+    private Material visualMaterial;
 
     private bool placed = false;
 
@@ -79,17 +80,17 @@ public class Handle : MonoBehaviour
 
 
 
-        if (InventoryController.instance.player_inventory.slots[index].prefab == null)
+        /*if (InventoryController.instance.player_inventory.slots[index].prefab == null)
         {
-            mesh.mesh = null;
-            meshrenderer.material = null;
+            // mesh.mesh = null;
+            //meshrenderer.material = null;
             return;
-        }
+        }*/
 
         GameObject prefab = InventoryController.instance.player_inventory.slots[index].prefab;
 
-        mesh.mesh = prefab.GetComponent<MeshFilter>().sharedMesh;
-        meshrenderer.material = prefab.GetComponent<MeshRenderer>().sharedMaterial;
+        // mesh.mesh = prefab.GetComponent<MeshFilter>().sharedMesh;
+        // meshrenderer.material = prefab.GetComponent<MeshRenderer>().sharedMaterial;
 
         PlaceableVisual(prefab);
 
@@ -99,12 +100,14 @@ public class Handle : MonoBehaviour
 
     void PlaceableVisual(GameObject _prefab)
     {
-        if (visual != null) { Destroy(visual); }
+        if (visual != null) Destroy(visual);
 
+        if (_prefab == null) return;
         if (_prefab.TryGetComponent(out PlaceableObject placeable))
         {
             visual = Instantiate(_prefab, transform.position, Quaternion.identity);
             visualMeshRenderer = visual.GetComponent<MeshRenderer>();
+            visualMaterial = visualMeshRenderer.material;
             visual.layer = 2;
             visual.GetComponent<BoxCollider>().isTrigger = true;
         }
@@ -125,9 +128,10 @@ public class Handle : MonoBehaviour
         bool temasVar = Physics.CheckBox(col.bounds.center, col.bounds.extents);
         visualMeshRenderer.sharedMaterial.color = temasVar ? Color.red : Color.green;
 
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, rayDistance, ~ignoreLayer))
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, rayDistance, GroundLayer))
         {
-            visual.transform.position = hit.point + new Vector3(0, 0.51f, 0);
+            visual.transform.position = hit.point + new Vector3(0, 0.1f, 0);
+
             if (Input.GetMouseButtonDown(0) && !temasVar)
             {
                 Place();
@@ -145,10 +149,9 @@ public class Handle : MonoBehaviour
         placed = true;
         visual.layer = 0;
         visual.GetComponent<BoxCollider>().isTrigger = false;
+        visual.GetComponent<MeshRenderer>().material.color = Color.white;
         visual = null;
         InventoryController.instance.DeleteItem(index);
-
-
     }
 
 

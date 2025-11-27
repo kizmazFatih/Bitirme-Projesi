@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class InventoryController : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class InventoryController : MonoBehaviour
       {
          Destroy(gameObject);
       }
-      
+
       for (int i = 0; i < bottom_slots_parent.childCount; i++)
       {
          T_slots.Add(bottom_slots_parent.GetChild(i));
@@ -60,7 +61,7 @@ public class InventoryController : MonoBehaviour
 
       T_slots[slot_index].GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = player_inventory.slots[slot_index].amount.ToString();
 
-      T_slots[slot_index].GetChild(0).GetComponent<RawImage>().texture = player_inventory.slots[slot_index].item_image; 
+      T_slots[slot_index].GetChild(0).GetComponent<RawImage>().texture = player_inventory.slots[slot_index].item_image;
 
       Handle.instance.SetHandlePrefab();
 
@@ -95,7 +96,7 @@ public class InventoryController : MonoBehaviour
 
       Handle.instance.SetHandlePrefab();
    }
-  
+
    public void DeleteItem(int slot_index)
    {
       Destroy(T_slots[slot_index].transform.GetChild(0).gameObject);
@@ -111,20 +112,20 @@ public class InventoryController : MonoBehaviour
 
    }
 
-    public void DecreaseItemAmount(int slot_index)
-    {
+   public void DecreaseItemAmount(int slot_index)
+   {
       player_inventory.slots[slot_index].amount--;
       if (player_inventory.slots[slot_index].amount == 0)
       {
          DeleteItem(slot_index);
       }
       UpdateSlotUI(slot_index);
-    }
-    public int FindMyIndex(Transform slot)
-    {
+   }
+   public int FindMyIndex(Transform slot)
+   {
       int x = T_slots.IndexOf(slot);
       return x;
-    }
+   }
 
    /* public void DropItem(int slot_index)
    {
@@ -139,13 +140,26 @@ public class InventoryController : MonoBehaviour
 
 
 
-
+   public CinemachineVirtualCamera vcam;
    #region Inputs
    public void OpenInventory()
    {
+      var pov = vcam.GetCinemachineComponent<CinemachinePOV>();
       is_open = !is_open;
       inventory_parent.gameObject.SetActive(is_open);
-      Cursor.lockState = is_open ? CursorLockMode.None : CursorLockMode.Locked;
+
+      if (is_open)
+      {
+         Cursor.lockState = CursorLockMode.None;
+         pov.m_HorizontalAxis.m_MaxSpeed = 0f;
+         pov.m_VerticalAxis.m_MaxSpeed = 0f;
+      }
+      else
+      {
+         Cursor.lockState = CursorLockMode.Locked;
+         pov.m_HorizontalAxis.m_MaxSpeed = 300f;
+         pov.m_VerticalAxis.m_MaxSpeed = 300f;
+      }
    }
 
 
