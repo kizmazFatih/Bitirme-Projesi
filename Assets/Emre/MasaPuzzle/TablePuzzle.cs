@@ -8,177 +8,258 @@ public class TablePuzzle : MonoBehaviour
     public Camera puzzleCamera;
 
     [Header("Player Kontrolü")]
-    public MonoBehaviour playerController; // FPSController scriptini buraya sürükle
-    public string playerTag = "Player";
+    public MonoBehaviour playerController; // FPSController vb.
 
-    [Header("Grid Ayarları")]
-    public Transform boardParent;      // Masanın üstündeki boş obje
-    public GameObject tilePrefab;
-    public GameObject tokenPrefab;
+    [Header("Tahta (ELLE yerleştiriliyor)")]
+    [Tooltip("Genişlik (x yönü, soldan sağa)")]
     public int gridWidth = 5;
-    public int gridHeight = 5;
-    public float cellSpacing = 0.4f;
 
-    [Header("Drawer / Bölme")]
-    public GameObject drawer;          // Masanın altından çıkacak obje
-    public Transform drawerClosedPos;  // Kapalı konum boş objesi
-    public Transform drawerOpenPos;    // Açık konum boş objesi
+    [Tooltip("Yükseklik (y yönü, alttan üste)")]
+    public int gridHeight = 5;
+
+    [Tooltip("Toplam kare sayısı = gridWidth * gridHeight. Bunları elle sürükle.")]
+    public Transform[] tiles;   // Bütün kareler (elle assign)
+    public Transform token;     // Üzerinde gezinen küre / obje
+
+    [Header("Token Hareketi")]
+    public float tokenMoveTime = 0.25f;   // Token kareler arasında ne kadar sürede gitsin
+    private Coroutine tokenMoveRoutine;
+
+    [Header("Drawer / Bölme (opsiyonel)")]
+    public GameObject drawer;
+    public Transform drawerClosedPos;
+    public Transform drawerOpenPos;
     public float drawerOpenTime = 1f;
 
-    private Transform[,] tiles;
-    private Transform tokenInstance;
+    [Header("E ile Etkileşim")]
+    public Transform player;                // Player'ın Transform'u
+    public float interactDistance = 2.5f;   // Kaç metrede E aktif olsun
+    public Transform interactionCenter;     // Mesafe ölçülecek nokta (masa kenarı)
+    public GameObject interactionIndicator; // Çerçeve / icon / vb.
 
-    private Vector2Int currentCell;
-    private Vector2Int goalCell;
+    [Header("Raycast Ayarları")]
+    public LayerMask buttonLayer;        // PuzzleButton layer'ı
 
-    private bool playerInRange = false;
-    private bool puzzleActive = false;
-    private bool puzzleSolved = false;
+    [Header("Sesler")]
+    public AudioSource audioSource;
+    public AudioClip successClip;
+
+    [Header("Win Kamera & Tile Animasyonu")]
+    public float winCameraMoveTime = 1.0f;      // Kamera ne kadar sürede yakın plâna gitsin
+    public Vector3 winCameraOffset = new Vector3(0.3f, 0.6f, 0.3f); // Tile'a göre kamera offset'i
+    public Vector3 winCameraLookOffset = Vector3.zero;              // Tile etrafında bakış offset'i
+    public float goalTileRiseHeight = 0.3f;      // Tile ne kadar yükselsin
+    public float goalTileRiseTime = 1.0f;        // Tile yükselme süresi
+
+    // Dahili durum
+    private Vector2Int currentCell;      // Şu anki x,y
+    private Vector2Int goalCell;         // Hedef x,y (sağ üst)
+    private bool puzzleActive;
+    private bool puzzleSolved;
 
     private void Start()
     {
-        // Drawer ilk başta kapalı konumda olsun
-        if (drawer != null && drawerClosedPos != null)
-        {
-            drawer.transform.position = drawerClosedPos.position;
-        }
-
-        // Puzzle kamerayı kapat
+        // Puzzle kamerası kapalı başlasın
         if (puzzleCamera != null)
             puzzleCamera.gameObject.SetActive(false);
 
-        // Grid oluştur
-        GenerateGrid();
+        // Drawer başlangıç pozisyonu
+        if (drawer != null && drawerClosedPos != null)
+            drawer.transform.position = drawerClosedPos.position;
+
+        // Grid boyutu ile tile sayısı uyumlu mu?
+        if (tiles == null || tiles.Length != gridWidth * gridHeight)
+        {
+            Debug.LogError("TablePuzzle: tiles array uzunluğu gridWidth*gridHeight ile uyuşmuyor!");
+        }
+
+        // Başlangıç ve hedef hücreler
+        currentCell = new Vector2Int(0, 0);                             // sol alt
+        goalCell = new Vector2Int(gridWidth - 1, gridHeight - 1);       // sağ üst
+
+        UpdateTokenWorldPosition();
+
+        // Etkileşim çerçevesi kapalı başlasın
+        if (interactionIndicator != null)
+            interactionIndicator.SetActive(false);
     }
 
     private void Update()
     {
-        // Masanın yanındayken E'ye basarak puzzle'a gir
-        if (playerInRange && !puzzleActive && Input.GetKeyDown(KeyCode.E))
+        // --- Puzzle AKTİF iken ---
+        if (puzzleActive)
+        {
+            // ESC ile çıkış
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ExitPuzzle();
+                return;
+            }
+
+            // Sol tık ile butonlara basma
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (puzzleCamera == null)
+                    return;
+
+                Ray ray = puzzleCamera.ScreenPointToRay(Input.mousePosition);
+
+                // Sadece buttonLayer'daki objelere çarpsın
+                if (Physics.Raycast(ray, out RaycastHit hit, 100f, buttonLayer))
+                {
+                    PuzzleButton3D button = hit.collider.GetComponent<PuzzleButton3D>();
+                    if (button != null)
+                    {
+                        button.Press(this);
+                    }
+                }
+            }
+
+            return;
+        }
+
+        // --- Puzzle KAPALI iken ---
+
+        // Eğer puzzle zaten çözülmüşse, bir daha highlight da E de çalışmasın
+        if (puzzleSolved)
+        {
+            if (interactionIndicator != null)
+                interactionIndicator.SetActive(false);
+
+            return;
+        }
+
+        // Mesafe kontrolü
+        bool inRange = false;
+        if (player != null)
+        {
+            Transform center = interactionCenter != null ? interactionCenter : transform;
+            float dist = Vector3.Distance(player.position, center.position);
+            inRange = dist <= interactDistance;
+        }
+
+        // Çerçeve / indicator açık kapalı
+        if (interactionIndicator != null)
+            interactionIndicator.SetActive(inRange);
+
+        // Sadece yakınken E çalışsın
+        if (inRange && Input.GetKeyDown(KeyCode.E))
         {
             EnterPuzzle();
         }
-
-        // Puzzle aktifken ESC ile çık
-        if (puzzleActive && Input.GetKeyDown(KeyCode.Escape))
-        {
-            ExitPuzzle();
-        }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag(playerTag))
-        {
-            playerInRange = true;
-            // Buraya istersen "E ile etkileşime geç" UI'ı ekleyebilirsin
-        }
-    }
+    // ------------------ KAMERA / MOD GEÇİŞİ ------------------
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag(playerTag))
-        {
-            playerInRange = false;
-        }
-    }
-
-    // -------- GRID OLUŞTURMA --------
-
-    void GenerateGrid()
-    {
-        if (boardParent == null || tilePrefab == null || tokenPrefab == null)
-        {
-            Debug.LogError("BoardParent / TilePrefab / TokenPrefab eksik!");
-            return;
-        }
-
-        tiles = new Transform[gridWidth, gridHeight];
-
-        // Tahtanın ortalanması
-        Vector3 origin = boardParent.position
-                         - new Vector3((gridWidth - 1) * cellSpacing * 0.5f, 0f, (gridHeight - 1) * cellSpacing * 0.5f);
-
-        for (int x = 0; x < gridWidth; x++)
-        {
-            for (int y = 0; y < gridHeight; y++)
-            {
-                Vector3 pos = origin + new Vector3(x * cellSpacing, 0f, y * cellSpacing);
-                GameObject tile = Object.Instantiate(tilePrefab, pos, boardParent.rotation, boardParent);
-                tiles[x, y] = tile.transform;
-            }
-        }
-
-        // Token'i oluştur
-        tokenInstance = Object.Instantiate(tokenPrefab, boardParent.position, Quaternion.identity, boardParent);
-
-        // Başlangıç ve hedef kareleri ayarla
-        currentCell = new Vector2Int(0, 0); // sol alt
-        goalCell = new Vector2Int(gridWidth - 1, gridHeight - 1); // sağ üst
-
-        UpdateTokenWorldPosition();
-    }
-
-    void UpdateTokenWorldPosition()
-    {
-        if (tokenInstance == null || tiles == null)
-            return;
-
-        Transform tile = tiles[currentCell.x, currentCell.y];
-        Vector3 pos = tile.position + Vector3.up * 0.1f;
-        tokenInstance.position = pos;
-    }
-
-    // -------- PUZZLE GİRİŞ/ÇIKIŞ --------
-
-    void EnterPuzzle()
+    private void EnterPuzzle()
     {
         puzzleActive = true;
 
-        // Player hareketini kapat
+        // Puzzle açılır açılmaz highlight'ı kapat
+        if (interactionIndicator != null)
+            interactionIndicator.SetActive(false);
+
         if (playerController != null)
             playerController.enabled = false;
 
-        // Kamera değiştir
         if (playerCamera != null)
+        {
+            playerCamera.enabled = false;
             playerCamera.gameObject.SetActive(false);
+        }
 
         if (puzzleCamera != null)
+        {
+            puzzleCamera.enabled = true;
             puzzleCamera.gameObject.SetActive(true);
+        }
 
-        // Mouse'u serbest bırak
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        Debug.Log("Puzzle MODE: ON");
     }
 
-    void ExitPuzzle()
+    private void ExitPuzzle()
     {
         puzzleActive = false;
 
-        // Player hareketini aç
         if (playerController != null)
             playerController.enabled = true;
 
-        // Kamera değiştir
         if (playerCamera != null)
+        {
+            playerCamera.enabled = true;
             playerCamera.gameObject.SetActive(true);
+        }
 
         if (puzzleCamera != null)
+        {
+            puzzleCamera.enabled = false;
             puzzleCamera.gameObject.SetActive(false);
+        }
 
-        // Mouse'u tekrar kilitle (senin oyun ayarına göre)
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        Debug.Log("Puzzle MODE: OFF");
     }
 
-    // -------- BUTONLAR (A/B/C/D) --------
-    // Bunlar PuzzleButton3D scripti tarafından çağrılacak
+    // ------------------ HÜCRE / TOKEN MANTIĞI ------------------
+
+    // (x,y) -> düz index (soldan sağa, alttan üste)
+    private int GetIndex(Vector2Int cell)
+    {
+        return cell.y * gridWidth + cell.x;
+    }
+
+    private void UpdateTokenWorldPosition()
+    {
+        if (token == null || tiles == null) return;
+        if (tiles.Length != gridWidth * gridHeight) return;
+
+        int idx = GetIndex(currentCell);
+
+        if (idx < 0 || idx >= tiles.Length || tiles[idx] == null)
+        {
+            Debug.LogError("TablePuzzle: Geçersiz hücre index: " + idx);
+            return;
+        }
+
+        Vector3 targetPos = tiles[idx].position + Vector3.up * 0.1f;
+
+        // Eski hareket coroutine'i varsa durdur
+        if (tokenMoveRoutine != null)
+            StopCoroutine(tokenMoveRoutine);
+
+        // Yeni hedefe doğru yumuşak hareket başlat
+        tokenMoveRoutine = StartCoroutine(MoveToken(targetPos));
+    }
+
+    private IEnumerator MoveToken(Vector3 targetPos)
+    {
+        if (token == null) yield break;
+
+        Vector3 startPos = token.position;
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / tokenMoveTime;
+            token.position = Vector3.Lerp(startPos, targetPos, t);
+            yield return null;
+        }
+
+        token.position = targetPos;
+    }
+
+    // ------------------ BUTON FONKSİYONLARI (A/B/C/D) ------------------
 
     public void PressA()
     {
         if (!puzzleActive || puzzleSolved) return;
 
-        // A: (x, y) -> ((x + 1) mod 5, y)
+        // A: (x, y) -> ((x + 1) mod width, y)
         currentCell.x = (currentCell.x + 1) % gridWidth;
         CheckGoalAndUpdate();
     }
@@ -187,7 +268,7 @@ public class TablePuzzle : MonoBehaviour
     {
         if (!puzzleActive || puzzleSolved) return;
 
-        // B: (x, y) -> (x, (y + 1) mod 5)
+        // B: (x, y) -> (x, (y + 1) mod height)
         currentCell.y = (currentCell.y + 1) % gridHeight;
         CheckGoalAndUpdate();
     }
@@ -196,7 +277,7 @@ public class TablePuzzle : MonoBehaviour
     {
         if (!puzzleActive || puzzleSolved) return;
 
-        // C: (x, y) -> ((x + 2) mod 5, (y + 1) mod 5)
+        // C: (x, y) -> ((x + 2) mod width, (y + 1) mod height)
         currentCell.x = (currentCell.x + 2) % gridWidth;
         currentCell.y = (currentCell.y + 1) % gridHeight;
         CheckGoalAndUpdate();
@@ -206,28 +287,88 @@ public class TablePuzzle : MonoBehaviour
     {
         if (!puzzleActive || puzzleSolved) return;
 
-        // D: (x, y) -> ((x + y) mod 5, (x + y) mod 5)
-        int v = (currentCell.x + currentCell.y) % gridWidth; // gridWidth == gridHeight
+        // D: (x, y) -> ((x + y) mod width, (x + y) mod height)
+        int v = (currentCell.x + currentCell.y) % gridWidth;
         currentCell = new Vector2Int(v, v);
         CheckGoalAndUpdate();
     }
 
-    void CheckGoalAndUpdate()
+    private void CheckGoalAndUpdate()
     {
         UpdateTokenWorldPosition();
 
         if (currentCell == goalCell && !puzzleSolved)
         {
             puzzleSolved = true;
-            StartCoroutine(OpenDrawer());
+
+            // Başarı sesi
+            if (audioSource != null && successClip != null)
+            {
+                audioSource.PlayOneShot(successClip);
+            }
+
+            // Kazanma sinematiği: kamera + tile yükselmesi
+            StartCoroutine(WinSequence());
         }
     }
 
-    IEnumerator OpenDrawer()
-    {
-        // İstersen puzzle çözüldüğünde direkt çıkmayıp burada da bırakabilirsin
-        ExitPuzzle();
+    // ------------------ KAZANMA SİNEMATİĞİ ------------------
 
+    private IEnumerator WinSequence()
+    {
+        // Hedef tile'ı bul
+        int idx = GetIndex(goalCell);
+        if (tiles == null || tiles.Length <= idx || tiles[idx] == null)
+            yield break;
+
+        Transform goalTile = tiles[idx];
+
+        // ÖNCE kamera yakın plâna gitsin
+        if (puzzleCamera != null)
+        {
+            Vector3 camStartPos = puzzleCamera.transform.position;
+            Quaternion camStartRot = puzzleCamera.transform.rotation;
+
+            Vector3 camTargetPos = goalTile.position + winCameraOffset;
+            Vector3 lookTarget = goalTile.position + winCameraLookOffset;
+            Quaternion camTargetRot = Quaternion.LookRotation(lookTarget - camTargetPos, Vector3.up);
+
+            float t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime / winCameraMoveTime;
+                puzzleCamera.transform.position = Vector3.Lerp(camStartPos, camTargetPos, t);
+                puzzleCamera.transform.rotation = Quaternion.Slerp(camStartRot, camTargetRot, t);
+                yield return null;
+            }
+
+            puzzleCamera.transform.position = camTargetPos;
+            puzzleCamera.transform.rotation = camTargetRot;
+        }
+
+        // SONRA hedef tile yukarı doğru yükselsin
+        Vector3 tileStartPos = goalTile.position;
+        Vector3 tileTargetPos = tileStartPos + Vector3.up * goalTileRiseHeight;
+
+        float t2 = 0f;
+        while (t2 < 1f)
+        {
+            t2 += Time.deltaTime / goalTileRiseTime;
+            goalTile.position = Vector3.Lerp(tileStartPos, tileTargetPos, t2);
+            yield return null;
+        }
+
+        goalTile.position = tileTargetPos;
+
+        // Buradan sonra ESC ile çıkmaya devam edebilirsin.
+        // İleride bu yükselen tile'ın üstüne anahtar objesi koyarız.
+    }
+
+    // ------------------ OPSİYONEL: Drawer Animasyonu (şimdilik kullanılmıyor) ------------------
+
+    private IEnumerator OpenDrawerCoroutine()
+    {
+        // İstersen win sinematiğinden sonra bunu da çağırabilirsin.
         if (drawer == null || drawerClosedPos == null || drawerOpenPos == null)
             yield break;
 
@@ -242,8 +383,7 @@ public class TablePuzzle : MonoBehaviour
             yield return null;
         }
 
-        // Burada anahtarı aktif edebilirsin
-        // keyObject.SetActive(true);
+        drawer.transform.position = endPos;
     }
 
     public bool IsPuzzleActive()

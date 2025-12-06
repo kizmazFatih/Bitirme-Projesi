@@ -5,29 +5,25 @@ public class PuzzleButton3D : MonoBehaviour
 {
     public enum ButtonType { A, B, C, D }
 
-    [Header("Ait Olduğu Puzzle")]
-    public TablePuzzle puzzle;    // Masadaki TablePuzzle scriptini buraya sürükle
+    [Header("Buton Tipi")]
     public ButtonType buttonType;
 
     [Header("Animasyon Ayarları")]
-    public float pressDepth = 0.05f;  // Buton ne kadar içeri girsin
-    public float pressSpeed = 10f;    // Animasyon hızı
+    public float pressDepth = 0.05f;
+    public float pressSpeed = 10f;
 
-    private Vector3 initialPosition;
-    private bool isAnimating = false;
+    private Vector3 initialLocalPosition;
+    private bool isAnimating;
 
     private void Start()
     {
-        initialPosition = transform.localPosition;
+        initialLocalPosition = transform.localPosition;
     }
 
-    private void OnMouseDown()
+    public void Press(TablePuzzle puzzle)
     {
-        // Puzzle aktif değilse buton çalışmasın
-        if (puzzle == null || !puzzle.IsPuzzleActive())
-            return;
+        if (puzzle == null) return;
 
-        // Önce mantığı çalıştır
         switch (buttonType)
         {
             case ButtonType.A:
@@ -44,38 +40,35 @@ public class PuzzleButton3D : MonoBehaviour
                 break;
         }
 
-        // Sonra animasyonu oynat
         if (!isAnimating)
         {
             StartCoroutine(PressAnimation());
         }
     }
 
-    IEnumerator PressAnimation()
+    private IEnumerator PressAnimation()
     {
         isAnimating = true;
 
-        Vector3 pressedPos = initialPosition - new Vector3(0f, pressDepth, 0f);
+        Vector3 pressedPos = initialLocalPosition - new Vector3(0f, pressDepth, 0f);
 
-        // Aşağı in
         float t = 0f;
         while (t < 1f)
         {
             t += Time.deltaTime * pressSpeed;
-            transform.localPosition = Vector3.Lerp(initialPosition, pressedPos, t);
+            transform.localPosition = Vector3.Lerp(initialLocalPosition, pressedPos, t);
             yield return null;
         }
 
-        // Yukarı çık
         t = 0f;
         while (t < 1f)
         {
             t += Time.deltaTime * pressSpeed;
-            transform.localPosition = Vector3.Lerp(pressedPos, initialPosition, t);
+            transform.localPosition = Vector3.Lerp(pressedPos, initialLocalPosition, t);
             yield return null;
         }
 
-        transform.localPosition = initialPosition;
+        transform.localPosition = initialLocalPosition;
         isAnimating = false;
     }
 }
