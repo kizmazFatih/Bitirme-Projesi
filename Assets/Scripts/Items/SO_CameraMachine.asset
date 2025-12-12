@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 070c20fe7fcae9f43878d80b59544b9a, type: 3}
-  m_Name: SO_Ladder
+  m_Name: SO_CameraMachine
   m_EditorClassIdentifier: 
   isPlaceable: 0
-  my_image: {fileID: 2800000, guid: 1080dd9d4ba894b44bff32c5ab0d5a6b, type: 3}
-  my_prefab: {fileID: 4043153079943864385, guid: 6b06c026a2a8c3d46aed735941648620, type: 3}
+  my_image: {fileID: 2800000, guid: b21edff3faed7d34894d57e9f3dabe51, type: 3}
+  my_prefab: {fileID: 9036083553055014447, guid: f364fcd8c1ea8224a93363238d3db11d, type: 3}
   my_amount: 1
   max_stack: 1

@@ -17,6 +17,7 @@ public class Handle : MonoBehaviour
 
 
     [SerializeField] FPSController player_controller;
+    [SerializeField] CameraMachine camMachine;
     private PlayerInputs playerInputs;
 
 
@@ -32,7 +33,6 @@ public class Handle : MonoBehaviour
     private GameObject visual;
     private Material visualMaterial;
 
-    private bool placed = false;
 
 
 
@@ -76,23 +76,34 @@ public class Handle : MonoBehaviour
 
 
 
-
-
-
-
-        /*if (InventoryController.instance.player_inventory.slots[index].prefab == null)
+        if (InventoryController.instance.player_inventory.slots[index].prefab == null)
         {
-            // mesh.mesh = null;
-            //meshrenderer.material = null;
+            mesh.mesh = null;
+            meshrenderer.material = null;
             return;
-        }*/
+        }
 
         GameObject prefab = InventoryController.instance.player_inventory.slots[index].prefab;
 
-        // mesh.mesh = prefab.GetComponent<MeshFilter>().sharedMesh;
-        // meshrenderer.material = prefab.GetComponent<MeshRenderer>().sharedMaterial;
-
+        mesh.mesh = prefab.GetComponent<MeshFilter>().sharedMesh;
+        meshrenderer.material = prefab.GetComponent<MeshRenderer>().sharedMaterial;
         PlaceableVisual(prefab);
+
+        if (prefab != null)
+        {
+            if (prefab.TryGetComponent(out CameraMachine cameraMachine))
+            {
+                camMachine.cameraActive = true;
+            }
+            else
+            {
+                camMachine.cameraActive = false;
+            }
+        }
+        else
+        {
+            camMachine.cameraActive = false;
+        }
 
 
 
@@ -116,6 +127,8 @@ public class Handle : MonoBehaviour
             visual = null;
         }
     }
+
+
 
 
     #region  Placement
@@ -146,12 +159,12 @@ public class Handle : MonoBehaviour
 
     private void Place()
     {
-        placed = true;
         visual.layer = 0;
         visual.GetComponent<BoxCollider>().isTrigger = false;
         visual.GetComponent<MeshRenderer>().material.color = Color.white;
         visual = null;
         InventoryController.instance.DeleteItem(index);
+
     }
 
 
@@ -159,6 +172,8 @@ public class Handle : MonoBehaviour
 
 
     #endregion
+
+
 
 
 

@@ -39,7 +39,7 @@ public class FPSController : MonoBehaviour
     }
     void SetInputs()
     {
-        playerInputs = new PlayerInputs();
+        playerInputs = InputController.instance.playerInputs;
         playerInputs.Movement.Enable();
 
         playerInputs.Movement.Move.performed += ctx => GetMoveInputs();

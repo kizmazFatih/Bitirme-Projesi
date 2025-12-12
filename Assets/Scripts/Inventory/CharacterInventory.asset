@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: CharacterInventory
   m_EditorClassIdentifier: 
   slots:
-  - isFull: 0
-    item_image: {fileID: 0}
-    prefab: {fileID: 0}
-    item: {fileID: 0}
-    amount: 0
+  - isFull: 1
+    item_image: {fileID: 2800000, guid: b21edff3faed7d34894d57e9f3dabe51, type: 3}
+    prefab: {fileID: 9036083553055014447, guid: f364fcd8c1ea8224a93363238d3db11d, type: 3}
+    item: {fileID: 11400000, guid: 8a996ccc6d8ab9f448e9c0482da68412, type: 2}
+    amount: 1
   - isFull: 0
     item_image: {fileID: 0}
     prefab: {fileID: 0}

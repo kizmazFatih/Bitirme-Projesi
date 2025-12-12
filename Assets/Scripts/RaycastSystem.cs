@@ -19,7 +19,7 @@ public class RaycastSystem : MonoBehaviour
     private void Start()
     {
         cam = Camera.main;
-        playerInputs = GetComponent<FPSController>().playerInputs;
+        playerInputs = InputController.instance.playerInputs;
         playerInputs.Interaction.Enable();
     }
     void Update()
