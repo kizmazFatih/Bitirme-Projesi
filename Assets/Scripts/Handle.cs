@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -80,6 +81,7 @@ public class Handle : MonoBehaviour
         {
             mesh.mesh = null;
             meshrenderer.material = null;
+            camMachine.cameraActive = false;
             return;
         }
 
@@ -89,6 +91,7 @@ public class Handle : MonoBehaviour
         meshrenderer.material = prefab.GetComponent<MeshRenderer>().sharedMaterial;
         PlaceableVisual(prefab);
 
+        Debug.Log(prefab.name);
         if (prefab != null)
         {
             if (prefab.TryGetComponent(out CameraMachine cameraMachine))
@@ -100,10 +103,8 @@ public class Handle : MonoBehaviour
                 camMachine.cameraActive = false;
             }
         }
-        else
-        {
-            camMachine.cameraActive = false;
-        }
+        
+        
 
 
 

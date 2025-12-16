@@ -11,11 +11,17 @@ public class CameraMachine : MonoBehaviour, IInteractable
     public CinemachineVirtualCamera normalCam;
     public CinemachineVirtualCamera viewfinderCam;
 
+    // YENİ: Sadece fotoğraf çekmek için kullanılacak gizli kamera
+    [Tooltip("Fotoğrafı çekecek olan gerçek Unity Kamerası (Virtual Camera değil)")]
+    public Camera photoCamera;
+
+    // YENİ: Hangi objelerin fotoğrafta çıkacağını belirleyen maske
+    [Tooltip("Fotoğrafta hangi Layer'lar görünsün?")]
+    public LayerMask photoLayers;
+
     [Header("Photo Settings")]
     public GameObject photoPrefab;
     public Transform photoSpawnPoint;
-
-    // YENİ: Siyah kenarları yapan obje (UI Image veya PostProcess Volume objesi)
     public GameObject blackScopeOverlay;
 
     private bool bounce = false;
@@ -43,16 +49,14 @@ public class CameraMachine : MonoBehaviour, IInteractable
             bounce = !bounce;
             if (bounce)
             {
-                InputController.instance.Activation(null);
+                InputController.instance.playerInputs.Disable(); 
                 SwitchToViewfinder();
-                // Dürbün açılınca siyah kenarlığı göster (Eğer kapalıysa)
                 if (blackScopeOverlay != null) blackScopeOverlay.SetActive(true);
             }
             else
             {
-                InputController.instance.Activation(InputController.instance.playerActions);
+                InputController.instance.playerInputs.Enable(); 
                 SwitchToNormal();
-                // Dürbün kapanınca siyah kenarlığı gizle
                 if (blackScopeOverlay != null) blackScopeOverlay.SetActive(false);
             }
         }
@@ -66,26 +70,39 @@ public class CameraMachine : MonoBehaviour, IInteractable
 
     IEnumerator CapturePhoto()
     {
-        // 1. ADIM: Siyah kenarlığı GEÇİCİ OLARAK kapat
-        if (blackScopeOverlay != null)
-            blackScopeOverlay.SetActive(false);
+        // 1. ADIM: Fotoğraf Kamerasını Hazırla
+        // Fotoğraf kamerasını oyuncunun baktığı yere taşı
+        photoCamera.transform.position = Camera.main.transform.position;
+        photoCamera.transform.rotation = Camera.main.transform.rotation;
 
-        // UI'ın kapalı olduğu karenin render edilmesini bekle
-        yield return new WaitForEndOfFrame();
+        // Kameranın sadece belirlediğimiz katmanları görmesini sağla
+        photoCamera.cullingMask = photoLayers;
 
-        // 2. ADIM: Temiz ekranı yakala
-        Texture2D screenTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        screenTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        screenTexture.Apply();
+        // 2. ADIM: Geçici bir Render Texture oluştur
+        // Bu, görüntüyü ekrana basmak yerine hafızaya kaydetmemizi sağlar
+        RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 24);
+        photoCamera.targetTexture = rt; // Kamera artık bu texture'a bakıyor
 
-        // 3. ADIM: Siyah kenarlığı hemen geri aç (Oyuncu fark etmez bile)
-        if (blackScopeOverlay != null)
-            blackScopeOverlay.SetActive(true);
+        // 3. ADIM: Manuel olarak render al (Fotoğrafı çek)
+        photoCamera.Render();
+
+        // 4. ADIM: Render Texture'ı Texture2D'ye çevir
+        RenderTexture.active = rt;
+        Texture2D photoTexture = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
+        // Şu anki aktif render texture'dan pikselleri oku
+        photoTexture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+        photoTexture.Apply();
+
+        // 5. ADIM: Temizlik
+        photoCamera.targetTexture = null;
+        RenderTexture.active = null;
+        Destroy(rt); // Hafızayı şişirmemek için RenderTexture'ı yok et
+
+        yield return null; // Bir kare bekle (işlem güvenliği için)
 
         // Fotoğrafı yarat
-        SpawnPhotoInHand(screenTexture);
-
-        Debug.Log("Temiz Fotoğraf Çekildi!");
+        SpawnPhotoInHand(photoTexture);
+        Debug.Log("Filtreli Fotoğraf Çekildi!");
 
         SwitchToNormal();
     }
@@ -124,8 +141,10 @@ public class CameraMachine : MonoBehaviour, IInteractable
         normalCam.Priority = 11;
         viewfinderCam.Priority = 10;
 
-        // Emniyet sübabı: Normale geçince overlay kesin kapansın
+        // Emniyet sübabı
         if (blackScopeOverlay != null) blackScopeOverlay.SetActive(false);
+
+        InputController.instance.playerInputs.Enable(); 
     }
 
     private float NormalizeAngle(float angle)

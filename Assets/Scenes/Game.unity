@@ -2315,6 +2315,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3604391555549591827, guid: 74d8e7562d1b8c846a3d93aee75a1d6e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: -2403575161308405332, guid: 74d8e7562d1b8c846a3d93aee75a1d6e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -2322,6 +2326,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 74d8e7562d1b8c846a3d93aee75a1d6e, type: 3}
       propertyPath: m_Name
       value: pandorabox
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 74d8e7562d1b8c846a3d93aee75a1d6e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2195755201391670582, guid: 74d8e7562d1b8c846a3d93aee75a1d6e, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3667032332472555165, guid: 74d8e7562d1b8c846a3d93aee75a1d6e, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -4821,6 +4833,89 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1645162142}
   m_CullTransparentMesh: 1
+--- !u!1 &1661479857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1661479859}
+  - component: {fileID: 1661479858}
+  m_Layer: 0
+  m_Name: PhotoCapture Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!20 &1661479858
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661479857}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &1661479859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661479857}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.44122, y: 1.591735, z: 2.7104793}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1662835556 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5589794351628811842, guid: d65445cb7727068418c9049dc7239927, type: 3}
@@ -6686,6 +6781,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2135786816}
     - target: {fileID: 3881296051612459873, guid: f364fcd8c1ea8224a93363238d3db11d, type: 3}
+      propertyPath: photoCamera
+      value: 
+      objectReference: {fileID: 1661479858}
+    - target: {fileID: 3881296051612459873, guid: f364fcd8c1ea8224a93363238d3db11d, type: 3}
       propertyPath: viewfinderCam
       value: 
       objectReference: {fileID: 4599839489434442403}
@@ -6697,6 +6796,10 @@ PrefabInstance:
       propertyPath: blackScopeOverlay
       value: 
       objectReference: {fileID: 325969529}
+    - target: {fileID: 3881296051612459873, guid: f364fcd8c1ea8224a93363238d3db11d, type: 3}
+      propertyPath: photoLayers.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 9036083553055014447, guid: f364fcd8c1ea8224a93363238d3db11d, type: 3}
       propertyPath: m_Name
       value: Cube
@@ -7678,11 +7781,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4316919366172431610, guid: 6b06c026a2a8c3d46aed735941648620, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.03
+      value: 0.029999971
       objectReference: {fileID: 0}
     - target: {fileID: 4316919366172431610, guid: 6b06c026a2a8c3d46aed735941648620, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.9
+      value: 0.90000004
       objectReference: {fileID: 0}
     - target: {fileID: 4316919366172431610, guid: 6b06c026a2a8c3d46aed735941648620, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8094,5 +8197,6 @@ SceneRoots:
   - {fileID: 832675391}
   - {fileID: 6058068751910238241}
   - {fileID: 673883043}
-  - {fileID: 7581108039567909132}
   - {fileID: 4141802110541553549}
+  - {fileID: 7581108039567909132}
+  - {fileID: 1661479859}
