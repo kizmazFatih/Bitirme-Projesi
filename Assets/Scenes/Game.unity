@@ -6931,7 +6931,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 9
+  m_Priority: 11
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 809750285}
   m_Follow: {fileID: 853281197}
@@ -8178,6 +8178,7 @@ SceneRoots:
   - {fileID: 2135786817}
   - {fileID: 432214679}
   - {fileID: 705507995}
+  - {fileID: 1661479859}
   - {fileID: 325969533}
   - {fileID: 174362546}
   - {fileID: 195664437}
@@ -8199,4 +8200,3 @@ SceneRoots:
   - {fileID: 673883043}
   - {fileID: 4141802110541553549}
   - {fileID: 7581108039567909132}
-  - {fileID: 1661479859}
