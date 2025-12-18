@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fb21e4d8-586c-4b3d-b50f-62bb8269414a" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/MasaPuzzle/PuzzleButton3D.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/MasaPuzzle/TablePuzzle.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/MasaPuzzle/simplefpscontr.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/EventDispatcher.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="36QArBZtgsXBYcBR02jO94eAPxJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Emre&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fb21e4d8-586c-4b3d-b50f-62bb8269414a" name="Changes" comment="" />
+      <created>1764928619060</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1764928619060</updated>
+      <workItem from="1764928621229" duration="39000" />
+      <workItem from="1764929487274" duration="17000" />
+      <workItem from="1764929527430" duration="17000" />
+      <workItem from="1764929568095" duration="31000" />
+      <workItem from="1764929601961" duration="13000" />
+      <workItem from="1764931733106" duration="25000" />
+      <workItem from="1764931761239" duration="14000" />
+      <workItem from="1764931856715" duration="12000" />
+      <workItem from="1764931959040" duration="1994000" />
+      <workItem from="1764946027954" duration="22000" />
+      <workItem from="1764946053297" duration="329000" />
+      <workItem from="1764946385140" duration="296000" />
+      <workItem from="1764946693752" duration="187000" />
+      <workItem from="1764946887250" duration="472000" />
+      <workItem from="1764947363040" duration="1258000" />
+      <workItem from="1764958899675" duration="83000" />
+      <workItem from="1764958986237" duration="266000" />
+      <workItem from="1764959261682" duration="61000" />
+      <workItem from="1764959326099" duration="177000" />
+      <workItem from="1764959507085" duration="9000" />
+      <workItem from="1764959618654" duration="20000" />
+      <workItem from="1764960064947" duration="38000" />
+      <workItem from="1765008656047" duration="100000" />
+      <workItem from="1765008784697" duration="127000" />
+      <workItem from="1765008916303" duration="121000" />
+      <workItem from="1765009053871" duration="17000" />
+      <workItem from="1765009134082" duration="451000" />
+      <workItem from="1765009589790" duration="355000" />
+      <workItem from="1765009964446" duration="1793000" />
+      <workItem from="1765014695213" duration="119000" />
+      <workItem from="1765014818369" duration="25000" />
+      <workItem from="1765014854182" duration="5000" />
+      <workItem from="1765015017843" duration="1226000" />
+      <workItem from="1765016535744" duration="43000" />
+      <workItem from="1765016581914" duration="40000" />
+      <workItem from="1765016630360" duration="245000" />
+      <workItem from="1765016882114" duration="140000" />
+      <workItem from="1765017026348" duration="31000" />
+      <workItem from="1765017059579" duration="437000" />
+      <workItem from="1765017499988" duration="343000" />
+      <workItem from="1765017851896" duration="155000" />
+      <workItem from="1765018297494" duration="211000" />
+      <workItem from="1765018512739" duration="479000" />
+      <workItem from="1765018999723" duration="760000" />
+      <workItem from="1765020188185" duration="1222000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityProjectDiscoverer">
+    <option name="unityProject" value="true" />
+    <option name="unityProjectFolder" value="true" />
+  </component>
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>
