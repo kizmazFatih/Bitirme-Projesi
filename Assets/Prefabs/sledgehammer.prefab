@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1165873001466863749}
   - component: {fileID: 5601752890800494881}
   - component: {fileID: 5150677676489756908}
+  - component: {fileID: 5162508470989694245}
   m_Layer: 0
   m_Name: sledgehammer
   m_TagString: Untagged
@@ -26,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8380099851523151312}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.70712954, y: 0, z: -0, w: 0.707084}
+  m_LocalRotation: {x: 0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: -9.32, y: 1.46, z: 5.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 89.98, y: 0, z: 0}
 --- !u!33 &5601752890800494881
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -83,3 +84,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5162508470989694245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8380099851523151312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc61ab49cb604a4bb9c84858b1b7e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 0}
+  playerCamera: {fileID: 0}
+  hitDistance: 3
+  highlightDistance: 3
+  highlightColor: {r: 1, g: 0, b: 0, a: 1}
+  hammerAnimator: {fileID: 0}
+  hitTriggerName: Hit
