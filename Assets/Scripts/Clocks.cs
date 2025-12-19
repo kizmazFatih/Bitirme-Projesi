@@ -10,7 +10,7 @@ public class Clocks : MonoBehaviour
     [SerializeField] private TextMeshProUGUI clock_txt;
 
     private int broken_clocks = 0;
-    private float time = 0;
+    [SerializeField] private float time;
     private int minute;
 
     private bool gameOver = false;
@@ -29,7 +29,6 @@ public class Clocks : MonoBehaviour
     void Start()
     {
         broken_clocks = 0;
-        time = 600;
         minute = 0;
     }
 
