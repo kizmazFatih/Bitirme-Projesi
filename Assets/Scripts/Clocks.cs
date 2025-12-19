@@ -1,35 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Clocks : MonoBehaviour
 {
+    public static Clocks instance;
+
+    [SerializeField] private TextMeshProUGUI clock_txt;
 
     private int broken_clocks = 0;
     private float time = 0;
-    private int hour;
+    private int minute;
 
     private bool gameOver = false;
 
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         broken_clocks = 0;
-        time = 0;
-        hour = 0;
+        time = 600;
+        minute = 0;
     }
+
 
     void Update()
     {
-        if (gameOver && broken_clocks >= 5) return;
+        if (gameOver || broken_clocks >= 3) return;
 
-        time += Time.deltaTime * 1;
+        time -= Time.deltaTime;
 
-        if (time >= 60)
-        {
-            hour++;
-            time = 0;
-        }
-        if (hour >= 10) { gameOver = true; }
+        int seconds = (int)time % 60;
+        minute = (int)time / 60;
 
+        clock_txt.text = string.Format("{0}:{1:00}", minute, seconds);
+    }
+
+    public void AddBrokenClock()
+    {
+        broken_clocks += 1;
     }
 }

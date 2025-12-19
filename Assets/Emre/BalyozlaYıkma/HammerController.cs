@@ -37,7 +37,8 @@ public class HammerController : MonoBehaviour, IInteractable
     void Update()
     {
         HandleHighlight();
-
+        if (InventoryController.instance.player_inventory.slots[Handle.instance.index].prefab == null) return;
+        if (InventoryController.instance.player_inventory.slots[Handle.instance.index].prefab.tag != "SledgeHammer") return;
         if (Input.GetMouseButtonDown(0))
         {
             DoHit();

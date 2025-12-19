@@ -10,7 +10,7 @@ public class Handle : MonoBehaviour
 {
     public static Handle instance;
 
-    private int index;
+    public int index;
 
 
     private MeshRenderer meshrenderer;

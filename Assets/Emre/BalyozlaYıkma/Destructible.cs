@@ -11,7 +11,8 @@ public class Destructible : MonoBehaviour
 
     public void Break(Vector3 hitPoint)
     {
-        if (isBroken) return;
+        if (InventoryController.instance.player_inventory.slots[Handle.instance.index].prefab == null) return;
+        if (isBroken || InventoryController.instance.player_inventory.slots[Handle.instance.index].prefab.tag != "SledgeHammer") return;
         isBroken = true;
 
         if (fracturedPrefab == null)
@@ -33,12 +34,13 @@ public class Destructible : MonoBehaviour
         {
             rb.AddExplosionForce(explosionForce, hitPoint, explosionRadius, explosionUpward);
         }
-
+        Clocks.instance.AddBrokenClock();
         Destroy(gameObject);
     }
 
     public void Break()
     {
         Break(transform.position);
+
     }
 }
