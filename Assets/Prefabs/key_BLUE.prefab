@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1305403883349601065}
   - component: {fileID: 5374374293601127484}
   - component: {fileID: 8879752375846937936}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: key_BLUE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -8.65, y: 0.134, z: -0.04365947}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -106,8 +106,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
-  m_Center: {x: 0.00022438553, y: -0.0013207765, z: 0.045988236}
+  m_Size: {x: 0.012966394, y: 0.045979165, z: 0.12701035}
+  m_Center: {x: 0.0005244812, y: -0.0019210081, z: 0.045087814}
 --- !u!114 &1305403883349601065
 MonoBehaviour:
   m_ObjectHideFlags: 0

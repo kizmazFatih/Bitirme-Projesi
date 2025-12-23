@@ -17,3 +17,6 @@ MonoBehaviour:
   my_prefab: {fileID: 9036083553055014447, guid: f364fcd8c1ea8224a93363238d3db11d, type: 3}
   my_amount: 1
   max_stack: 1
+  heldPosition: {x: 0.7, y: -0.4, z: 1}
+  heldRotation: {x: 0, y: 0, z: 0}
+  heldScale: {x: 1, y: 1, z: 1}

@@ -10,4 +10,9 @@ public class SOItem : ScriptableObject
     public int my_amount;
     public int max_stack;
 
+    [Header("Elde Tutma Ayarları")]
+    public Vector3 heldPosition; // Elimizdeki lokal pozisyonu
+    public Vector3 heldRotation; // Elimizdeki lokal rotasyonu
+    public Vector3 heldScale = Vector3.one; // Elimizdeki ölçeği (Örn: Anahtar için 5,5,5 gibi)
+
 }

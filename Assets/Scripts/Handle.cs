@@ -73,42 +73,44 @@ public class Handle : MonoBehaviour
 
 
     public void SetHandlePrefab()
+{
+    // Mevcut slottaki verileri al
+    var slot = InventoryController.instance.player_inventory.slots[index];
+
+    if (slot.prefab == null || slot.item == null)
     {
+        mesh.mesh = null;
+        meshrenderer.material = null;
+        camMachine.cameraActive = false;
 
-
-
-        if (InventoryController.instance.player_inventory.slots[index].prefab == null)
-        {
-            mesh.mesh = null;
-            meshrenderer.material = null;
-            camMachine.cameraActive = false;
-            return;
-        }
-
-        GameObject prefab = InventoryController.instance.player_inventory.slots[index].prefab;
-
-        mesh.mesh = prefab.GetComponent<MeshFilter>().sharedMesh;
-        meshrenderer.material = prefab.GetComponent<MeshRenderer>().sharedMaterial;
-        PlaceableVisual(prefab);
-
-        Debug.Log(prefab.name);
-        if (prefab != null)
-        {
-            if (prefab.TryGetComponent(out CameraMachine cameraMachine))
-            {
-                camMachine.cameraActive = true;
-            }
-            else
-            {
-                camMachine.cameraActive = false;
-            }
-        }
-        
-        
-
-
-
+        PlaceableVisual(null);
+        return;
     }
+
+    SOItem itemData = slot.item;
+    GameObject prefab = slot.prefab;
+
+    // Mesh ve Material atama
+    mesh.mesh = prefab.GetComponent<MeshFilter>().sharedMesh;
+    meshrenderer.material = prefab.GetComponent<MeshRenderer>().sharedMaterial;
+
+    // --- YENİ: Orantısız boyut sorununu çözen kısım ---
+    transform.localPosition = itemData.heldPosition;
+    transform.localRotation = Quaternion.Euler(itemData.heldRotation);
+    transform.localScale = itemData.heldScale; 
+    // ------------------------------------------------
+
+    PlaceableVisual(prefab);
+
+    if (prefab.TryGetComponent(out CameraMachine cameraMachine))
+    {
+        camMachine.cameraActive = true;
+    }
+    else
+    {
+        camMachine.cameraActive = false;
+    }
+}
 
     void PlaceableVisual(GameObject _prefab)
     {

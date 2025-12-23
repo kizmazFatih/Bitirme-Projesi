@@ -3,30 +3,27 @@ using UnityEngine;
 [System.Serializable]
 public class PuzzleImage
 {
-    public string id;                               // "Resim 1" gibi
-    public Material[] tileMaterials = new Material[9]; // 9 parça
+    public string id;                               // Örn: "Tablo_Vazo"
+    public Material[] tileMaterials = new Material[9]; // 9 parça için materyaller
 }
 
 public class PuzzleManager : MonoBehaviour
 {
     public static PuzzleManager Instance { get; private set; }
 
-    [Header("Puzzle Setleri")]
-    public PuzzleImage[] puzzleImages;      // Inspector'dan dolduracağız
+    [Header("Bulmaca Ayarları")]
+    public PuzzleImage[] puzzleImages;      // Inspector'dan eklenecek setler
+    public PuzzlePiece[] pieces;            // Sahnede fiziksel olarak duran 9 parça
+    public PuzzleSlot[] slots;              // Duvar üzerindeki 9 yuva
 
-    [Header("Parçalar ve Slotlar")]
-    public PuzzlePiece[] pieces;            // 9 adet parça
-    public PuzzleSlot[] slots;              // 9 adet slot
-
-    [Header("Kapı / Çerçeve")]
-    public Animator doorAnimator;           // Kapı gibi açılacak obje
+    [Header("Başarı Sonrası Tetikleyiciler")]
+    public Animator doorAnimator;           
     public string doorOpenBoolName = "isOpen";
+    public GameObject successReward;        // Opsiyonel: Çözülünce ortaya çıkacak ödül (Anahtar vb.)
 
-    [Header("Ses (Puzzle Çözülünce)")]
+    [Header("Sesler")]
     public AudioSource sfxSource;
-    public AudioClip solveClip;             // Tamamlandığında çalacak ses
-
-    private int currentPuzzleIndex = -1;
+    public AudioClip solveClip;             
 
     private void Awake()
     {
@@ -47,64 +44,48 @@ public class PuzzleManager : MonoBehaviour
     {
         if (puzzleImages == null || puzzleImages.Length == 0)
         {
-            Debug.LogError("PuzzleImages atanmadı!");
+            Debug.LogError("PuzzleManager: Hiç puzzle resmi atanmadı!");
             return;
         }
 
-        currentPuzzleIndex = Random.Range(0, puzzleImages.Length);
-        PuzzleImage puzzle = puzzleImages[currentPuzzleIndex];
+        // Rastgele bir resim seç
+        int randomIndex = Random.Range(0, puzzleImages.Length);
+        PuzzleImage selectedPuzzle = puzzleImages[randomIndex];
 
-        if (puzzle.tileMaterials == null || puzzle.tileMaterials.Length < pieces.Length)
+        if (selectedPuzzle.tileMaterials == null || selectedPuzzle.tileMaterials.Length < pieces.Length)
         {
-            Debug.LogError("Seçilen puzzle için yeterli tileMaterials yok!");
+            Debug.LogError($"PuzzleManager: '{selectedPuzzle.id}' için yeterli materyal yok!");
             return;
         }
 
-        // Slotları temizle
+        // 1. Slotları temizle
         foreach (var slot in slots)
         {
-            if (slot != null)
-            {
-                slot.Clear();
-            }
+            if (slot != null) slot.Clear();
         }
 
-        // Kapıyı kapalıya çek
-        if (doorAnimator != null && !string.IsNullOrEmpty(doorOpenBoolName))
-        {
-            doorAnimator.SetBool(doorOpenBoolName, false);
-        }
+        // 2. Kapıyı kapalı duruma getir
+        if (doorAnimator != null) doorAnimator.SetBool(doorOpenBoolName, false);
 
-        // Her parçaya doğru görünümü ver ve başlangıca al
+        // 3. Parçaları hazırla ve materyallerini ata
         for (int i = 0; i < pieces.Length; i++)
         {
-            var piece = pieces[i];
-            if (piece == null) continue;
+            if (pieces[i] == null) continue;
 
-            piece.correctIndex = i; // 0-8
-            piece.SetAppearance(puzzle.tileMaterials[i]);
-            piece.ResetPieceToStart();
+            pieces[i].correctIndex = i; // Her parçanın olması gereken slot indexi
+            pieces[i].SetAppearance(selectedPuzzle.tileMaterials[i]);
+            pieces[i].ResetPieceToStart();
         }
 
-        Debug.Log("Puzzle seçildi: " + puzzle.id);
+        Debug.Log("Bulmaca Hazır: " + selectedPuzzle.id);
     }
 
+    // Her parça bir slota yerleştiğinde PuzzleSlot tarafından çağrılır
     public void OnPiecePlaced(PuzzleSlot slot, PuzzlePiece piece)
     {
-        // Her yerleştirmede ses çalmıyoruz, sadece çözülünce
         if (IsSolved())
         {
-            Debug.Log("Puzzle çözüldü!");
-
-            if (sfxSource != null && solveClip != null)
-            {
-                sfxSource.PlayOneShot(solveClip);
-            }
-
-            if (doorAnimator != null && !string.IsNullOrEmpty(doorOpenBoolName))
-            {
-                doorAnimator.SetBool(doorOpenBoolName, true);
-            }
+            CompletePuzzle();
         }
     }
 
@@ -114,13 +95,29 @@ public class PuzzleManager : MonoBehaviour
 
         foreach (var slot in slots)
         {
-            if (slot == null) return false;
-            if (!slot.HasPiece) return false;
-            if (slot.currentPiece == null) return false;
-
-            if (slot.currentPiece.correctIndex != slot.index) return false;
+            // Slot boşsa veya içindeki parça yanlışsa false dön
+            if (slot == null || !slot.HasPiece || slot.currentPiece.correctIndex != slot.index)
+            {
+                return false;
+            }
         }
-
         return true;
+    }
+
+    private void CompletePuzzle()
+    {
+        Debug.Log("Tebrikler! Bulmaca çözüldü.");
+
+        // Ses çal
+        if (sfxSource != null && solveClip != null)
+            sfxSource.PlayOneShot(solveClip);
+
+        // Kapıyı aç
+        if (doorAnimator != null)
+            doorAnimator.SetBool(doorOpenBoolName, true);
+
+        // Eğer bir ödül varsa aktifleştir
+        if (successReward != null)
+            successReward.SetActive(true);
     }
 }

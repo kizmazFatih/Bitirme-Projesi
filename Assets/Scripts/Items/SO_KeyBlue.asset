@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 070c20fe7fcae9f43878d80b59544b9a, type: 3}
   m_Name: SO_KeyBlue
   m_EditorClassIdentifier: 
-  itemType: 0
+  isPlaceable: 0
   my_image: {fileID: 2800000, guid: ecff82fa92fe36740a43a9f76f005ba5, type: 3}
   my_prefab: {fileID: 1136081537303500460, guid: d1ee9a2cf6a7c6b4db406ba4b9dd8cf1, type: 3}
   my_amount: 1
   max_stack: 1
+  heldPosition: {x: 0.7, y: -0.4, z: 1}
+  heldRotation: {x: 0, y: 0, z: 0}
+  heldScale: {x: 7, y: 7, z: 7}
