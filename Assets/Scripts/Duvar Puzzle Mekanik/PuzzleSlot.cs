@@ -1,116 +1,68 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
 public class PuzzleSlot : MonoBehaviour, IInteractable
 {
-    [Header("Index ve Snap")]
-    public int index;             // 0-8
-    public Transform snapPoint;   // Parçanın oturacağı nokta
-
-    [Header("Highlight")]
-    public GameObject highlightObject;  // Slot çerçevesi / glow
-
+    public int slotIndex; // 0'dan 8'e kadar müfettişten (Inspector) ata
     public PuzzlePiece currentPiece;
+    public Transform snapPoint; // Parçanın tam oturacağı boş obje
 
-    public void Interact()
-    {
-        PuzzleInteractor interactor = FindObjectOfType<PuzzleInteractor>();
-        if (interactor != null)
-        {
-            interactor.OnSlotInteracted(this); // Sistem parça koymayı denesin
-        }
-    }
-
-    public bool HasPiece
-    {
-        get { return currentPiece != null; }
-    }
+    public GameObject highlightObject;
 
     private void Awake()
     {
-        if (highlightObject != null)
-            highlightObject.SetActive(false);
+        // Başlangıçta slot vurgusunu kapat
+        if (highlightObject != null) highlightObject.SetActive(false);
+        currentPiece = null;
     }
 
-    private void Reset()
+    public void Interact()
     {
-        var c = GetComponent<Collider>();
-        c.isTrigger = true;
+        // Eğer slot doluysa bir şey yapma
+        if (currentPiece != null) return;
+
+        // Envanterdeki seçili eşyayı kontrol et
+        int activeIdx = Handle.instance.index;
+        var slotData = InventoryController.instance.player_inventory.slots[activeIdx];
+
+        if (slotData.isFull && slotData.item is PuzzleItem pItem)
+        {
+            // Elimdeki worldInstance'ı (gizli olan parçayı) al
+            GameObject pieceObj = slotData.worldInstance;
+            PuzzlePiece pieceScript = pieceObj.GetComponent<PuzzlePiece>();
+
+            PlacePiece(pieceScript);
+
+            // Envanterden sil
+            InventoryController.instance.DeleteItem(activeIdx);
+
+            // Bu satır olmazsa parça duvara gider ama elinde bir kopyası hala durur gibi görünür.
+            Handle.instance.SetHandlePrefab();
+        }
     }
 
-    public bool CanPlace(PuzzlePiece piece)
+    private void PlacePiece(PuzzlePiece piece)
     {
-        return currentPiece == null && piece != null;
-    }
-
-    public void PlacePiece(PuzzlePiece piece)
-    {
-        if (piece == null) return;
-
         currentPiece = piece;
-        piece.isPlaced = true;
+        GameObject obj = piece.gameObject;
 
-        // Hangi noktaya yapışacak? (genelde duvara gömülmesin diye snapPoint kullanıyoruz)
-        Transform target = (snapPoint != null) ? snapPoint : transform;
+        obj.SetActive(true);
+        obj.transform.SetParent(snapPoint != null ? snapPoint : transform);
+        obj.transform.localPosition = Vector3.zero;
+        obj.transform.localRotation = Quaternion.Euler(piece.placedRotationOffset);
 
-        // Önce parent'ı ayarla
-        piece.transform.SetParent(target);
+        piece.Freeze();
 
-        // Tam bu noktaya taşımak için world pozisyonunu hedefe ver
-        piece.transform.position = target.position;
+        // Vurguyu kapat
+        SetHighlight(false);
 
-        // 1) Duvara paralel hizala:
-        // target.forward = duvardan dışarı bakan yön olmalı (mavi Z oku)
-        Quaternion baseRotation = Quaternion.LookRotation(target.forward, Vector3.up);
-
-        // 2) Gerekirse küçük bir düzeltme yapmak için parçanın offset'ini ekle
-        // (placedLocalEulerOffset çoğu durumda (0,0,0) kalsın)
-        Quaternion offsetRotation = Quaternion.identity;
-        if (piece.placedLocalEulerOffset != Vector3.zero)
-        {
-            offsetRotation = Quaternion.Euler(piece.placedLocalEulerOffset);
-        }
-
-        // Son rotasyonu ver (world rotasyon)
-        piece.transform.rotation = baseRotation * offsetRotation;
-
-        // Scale’i normale döndür
-        piece.RestoreScale();
-
-        // Fizik ayarları
-        Rigidbody rb = piece.GetComponent<Rigidbody>();
-        Collider col = piece.GetComponent<Collider>();
-
-        if (rb != null) rb.isKinematic = true;
-        if (col != null) col.isTrigger = true;
-
-        SetHighlighted(false);
-
-        // PuzzleManager'a haber ver
-        if (PuzzleManager.Instance != null)
-        {
-            PuzzleManager.Instance.OnPiecePlaced(this, piece);
-        }
+        // Manager'a kontrol ettir
+        PuzzleManager.instance.CheckCompletion();
     }
 
-
-
-    public void Clear()
-    {
-        currentPiece = null;
-    }
-
-    // Slot içindeki parçayı geri alırken sadece referansı temizlememiz yeterli
-    public void RemovePiece()
-    {
-        currentPiece = null;
-    }
-
-    public void SetHighlighted(bool value)
+    // Bu fonksiyonu Interaction sisteminden çağıracağız
+    public void SetHighlight(bool state)
     {
         if (highlightObject != null)
-        {
-            highlightObject.SetActive(value);
-        }
+            highlightObject.SetActive(state);
     }
 }

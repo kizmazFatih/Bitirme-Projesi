@@ -1,92 +1,64 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
-public class PuzzlePiece : MonoBehaviour, IInteractable
+public class PuzzlePiece : MonoBehaviour, IInteractable, Copyable
 {
-    [HideInInspector] public int correctIndex;
-    [HideInInspector] public bool isPlaced;
-
-    [Header("Highlight")]
-    public GameObject highlightObject;        
-
-    [Header("Elde Tutma Ayarları")]
-    public float heldScaleMultiplier = 0.4f; 
-
-    [Header("Rotasyon Offsets")]
-    public Vector3 heldLocalEulerOffset = Vector3.zero;
-    public Vector3 placedLocalEulerOffset = Vector3.zero;
-
-    private Vector3 startPos;
-    private Quaternion startRot;
-    private Transform startParent;
-    private Vector3 originalScale;
+    public PuzzleItem itemData;
+    private Renderer rend;
+    public Vector3 placedRotationOffset; // Duvara takıldığında ince ayar rotasyonu
 
     private Rigidbody rb;
     private Collider col;
-    private Renderer rend;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         rend = GetComponent<Renderer>();
-        originalScale = transform.localScale;
-        SaveStartTransform();
 
-        if (highlightObject != null) highlightObject.SetActive(false);
+        ApplyVisuals();
     }
-
-    // InteractionSystem tarafından çağrılacak fonksiyon
-    public void Interact()
+    // Bu fonksiyon parçanın resmini SO'daki materyalle eşitleyecek
+    public void ApplyVisuals()
     {
-        PuzzleInteractor interactor = FindObjectOfType<PuzzleInteractor>();
-        if (interactor != null)
+        if (rend != null && itemData != null && itemData.pieceMaterial != null)
         {
-            interactor.OnPieceInteracted(this);
+            rend.material = itemData.pieceMaterial;
         }
     }
 
-    public void SaveStartTransform()
+    public void Interact()
     {
-        startPos = transform.position;
-        startRot = transform.rotation;
-        startParent = transform.parent;
+        if (transform.parent != null && transform.parent.parent.TryGetComponent(out PuzzleSlot slot))
+        {
+            slot.currentPiece = null;
+            if (slot.slotIndex == itemData.correctIndex)
+            {
+                PuzzleManager.instance.correctCount--;
+            }
+            transform.parent = null;
+        }
+        // Envantere ekle (this.gameObject'i sakla ki yerleştirirken geri çağırabilelim)
+        if (InventoryController.instance.player_inventory.AddItem(itemData, 1, this.gameObject))
+        {
+
+            GetComponent<MeshRenderer>().enabled = false;
+            if (GetComponent<Rigidbody>() != null) GetComponent<Rigidbody>().isKinematic = true;
+            if (GetComponent<Collider>() != null) GetComponent<Collider>().enabled = false;
+
+            Handle.instance.SetHandlePrefab(); // Elindeki görüntüyü güncelle
+        }
     }
 
-    public void ResetPieceToStart()
+
+    // Yerleştiğinde fiziklerini kapatmak için yardımcı fonksiyon
+    public void Freeze()
     {
-        isPlaced = false;
-        transform.SetParent(startParent);
-        transform.position = startPos;
-        transform.rotation = startRot;
-        transform.localScale = originalScale;
-        if (rb != null) rb.isKinematic = false;
-        if (col != null) col.isTrigger = false;
+        if (col != null) col.enabled = true;
+        GetComponent<MeshRenderer>().enabled = true;
     }
 
-    public void PickUp(Transform holdPoint)
+    public GameObject MyObject()
     {
-        isPlaced = false;
-        if (rb != null) rb.isKinematic = true;
-        if (col != null) col.isTrigger = true;
-
-        Quaternion worldRot = transform.rotation;
-        transform.SetParent(holdPoint);
-        transform.position = holdPoint.position;
-        transform.rotation = worldRot;
-        transform.localScale = originalScale * heldScaleMultiplier;
+        return this.gameObject;
     }
-
-    public void Drop(Vector3 worldPos)
-    {
-        transform.SetParent(startParent);
-        if (rb != null) rb.isKinematic = false;
-        if (col != null) col.isTrigger = false;
-        transform.position = worldPos;
-        transform.localScale = originalScale;
-    }
-
-    public void SetAppearance(Material mat) { if (rend != null && mat != null) rend.material = mat; }
-    public void RestoreScale() => transform.localScale = originalScale;
-    public void SetHighlighted(bool value) { if (highlightObject != null) highlightObject.SetActive(value); }
 }

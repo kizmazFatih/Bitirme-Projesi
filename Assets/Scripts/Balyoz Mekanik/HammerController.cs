@@ -1,7 +1,10 @@
 using UnityEngine;
 
-public class HammerController : MonoBehaviour
+public class HammerController : MonoBehaviour, IInteractable
 {
+    [Header("Item Verisi")]
+    public SOItem item; // Inspector'dan Hammer SO'sunu buraya sürükle
+
     [Header("References")]
     public Camera playerCamera;
     public float hitDistance = 3f;
@@ -23,24 +26,55 @@ public class HammerController : MonoBehaviour
             playerCamera = Camera.main;
     }
 
+    // Yerdeyken etkileşime girip envantere alma
+    public void Interact()
+    {
+        var player_inventory = InventoryController.instance.player_inventory;
+        if (player_inventory.AddItem(item, item.my_amount, this.gameObject))
+        {
+            GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<Rigidbody>().isKinematic = true;
+            if (GetComponent<Collider>() != null) GetComponent<Collider>().enabled = false;
+
+        }
+    }
+
     void Update()
     {
+        // --- KRİTİK KONTROL: Eğer balyoz elde değilse çalışma ---
+        if (!IsHammerEquipped())
+        {
+            ClearHighlight(); // Başka eşyaya geçince parlamayı temizle
+            return;
+        }
+
         HandleHighlight();
 
-        if (Input.GetMouseButtonDown(0))
+        // Merkezi InputController üzerinden sol tık kontrolü
+        if (InputController.instance != null &&
+            InputController.instance.playerInputs.Interaction.LeftClick.WasPerformedThisFrame()) // Veya Attack/Fire girişi
         {
             DoHit();
         }
     }
 
+    // Eldeki eşyanın balyoz olup olmadığını kontrol eden fonksiyon
+    bool IsHammerEquipped()
+    {
+        if (InventoryController.instance == null || Handle.instance == null) return false;
+
+        // Mevcut seçili slotu al
+        int currentSlotIndex = Handle.instance.index;
+        var currentItem = InventoryController.instance.player_inventory.slots[currentSlotIndex].item;
+
+        // Eğer slot boş değilse ve içindeki item bu balyozun SO verisiyle aynıysa true dön
+        return currentItem != null && currentItem == item;
+    }
+
     void HandleHighlight()
     {
         RaycastHit hit;
-
-        if (Physics.Raycast(playerCamera.transform.position,
-                            playerCamera.transform.forward,
-                            out hit,
-                            highlightDistance))
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, highlightDistance))
         {
             Destructible d = hit.collider.GetComponentInParent<Destructible>();
             if (d != null)
@@ -54,13 +88,11 @@ public class HammerController : MonoBehaviour
                         lastRenderer = r;
                         originalColor = r.material.color;
                     }
-
                     r.material.color = highlightColor;
                     return;
                 }
             }
         }
-
         ClearHighlight();
     }
 
@@ -75,33 +107,18 @@ public class HammerController : MonoBehaviour
 
     void DoHit()
     {
-        if (hammerAnimator != null && !string.IsNullOrEmpty(hitTriggerName))
-        {
-            hammerAnimator.SetTrigger(hitTriggerName);
-        }
+        if (hammerAnimator != null) hammerAnimator.SetTrigger(hitTriggerName);
 
         RaycastHit hit;
-
-        if (Physics.Raycast(playerCamera.transform.position,
-                            playerCamera.transform.forward,
-                            out hit,
-                            hitDistance))
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, hitDistance))
         {
-            Debug.Log("Vurulan obje: " + hit.collider.name);
-
             Destructible destructible = hit.collider.GetComponentInParent<Destructible>();
             if (destructible != null)
             {
                 destructible.Break(hit.point);
             }
-            else
-            {
-                Debug.Log("Destructible component yok.");
-            }
-        }
-        else
-        {
-            Debug.Log("Hiçbir şeye vurulmadı.");
         }
     }
+
+
 }

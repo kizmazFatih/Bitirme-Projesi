@@ -246,6 +246,24 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""f5edd7e8-6c2c-4522-8aa9-7cdab0032804"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""QButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""e0efe09e-de96-4169-b68f-21c833f59054"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -325,6 +343,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Number4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""87db9765-be5a-423e-a6d5-63110f57a2fc"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dc7b49be-e809-4577-a526-1e77881b0a09"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -344,6 +384,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Interaction_Number2 = m_Interaction.FindAction("Number2", throwIfNotFound: true);
         m_Interaction_Number3 = m_Interaction.FindAction("Number3", throwIfNotFound: true);
         m_Interaction_Number4 = m_Interaction.FindAction("Number4", throwIfNotFound: true);
+        m_Interaction_LeftClick = m_Interaction.FindAction("LeftClick", throwIfNotFound: true);
+        m_Interaction_QButton = m_Interaction.FindAction("QButton", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -539,6 +581,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Interaction_Number2;
     private readonly InputAction m_Interaction_Number3;
     private readonly InputAction m_Interaction_Number4;
+    private readonly InputAction m_Interaction_LeftClick;
+    private readonly InputAction m_Interaction_QButton;
     /// <summary>
     /// Provides access to input actions defined in input action map "Interaction".
     /// </summary>
@@ -578,6 +622,14 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Interaction/Number4".
         /// </summary>
         public InputAction @Number4 => m_Wrapper.m_Interaction_Number4;
+        /// <summary>
+        /// Provides access to the underlying input action "Interaction/LeftClick".
+        /// </summary>
+        public InputAction @LeftClick => m_Wrapper.m_Interaction_LeftClick;
+        /// <summary>
+        /// Provides access to the underlying input action "Interaction/QButton".
+        /// </summary>
+        public InputAction @QButton => m_Wrapper.m_Interaction_QButton;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -625,6 +677,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Number4.started += instance.OnNumber4;
             @Number4.performed += instance.OnNumber4;
             @Number4.canceled += instance.OnNumber4;
+            @LeftClick.started += instance.OnLeftClick;
+            @LeftClick.performed += instance.OnLeftClick;
+            @LeftClick.canceled += instance.OnLeftClick;
+            @QButton.started += instance.OnQButton;
+            @QButton.performed += instance.OnQButton;
+            @QButton.canceled += instance.OnQButton;
         }
 
         /// <summary>
@@ -657,6 +715,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Number4.started -= instance.OnNumber4;
             @Number4.performed -= instance.OnNumber4;
             @Number4.canceled -= instance.OnNumber4;
+            @LeftClick.started -= instance.OnLeftClick;
+            @LeftClick.performed -= instance.OnLeftClick;
+            @LeftClick.canceled -= instance.OnLeftClick;
+            @QButton.started -= instance.OnQButton;
+            @QButton.performed -= instance.OnQButton;
+            @QButton.canceled -= instance.OnQButton;
         }
 
         /// <summary>
@@ -768,5 +832,19 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNumber4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LeftClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeftClick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "QButton" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnQButton(InputAction.CallbackContext context);
     }
 }

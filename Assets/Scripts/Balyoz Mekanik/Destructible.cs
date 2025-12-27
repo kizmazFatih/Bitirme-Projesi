@@ -2,9 +2,15 @@ using UnityEngine;
 
 public class Destructible : MonoBehaviour
 {
+    [Header("Saat Ayarları")]
+    public bool isClock = true; 
+
+    [Header("Parçalanma Efekti")]
     public GameObject fracturedPrefab;
-    public float explosionForce = 300f;
-    public float explosionRadius = 2f;
+
+    [Header("Fizik Ayarları")]
+    public float explosionForce = 400f;
+    public float explosionRadius = 3f;
     public float explosionUpward = 0.5f;
 
     private bool isBroken = false;
@@ -12,26 +18,35 @@ public class Destructible : MonoBehaviour
     public void Break(Vector3 hitPoint)
     {
         if (isBroken) return;
+        
+        if (Clocks.instance != null && Clocks.instance.gameOver) return;
+
         isBroken = true;
 
-        if (fracturedPrefab == null)
+        if (fracturedPrefab != null)
         {
-            Debug.LogWarning("Destructible: fracturedPrefab atanmadı!");
-            return;
+            GameObject fractured = Instantiate(
+                fracturedPrefab, 
+                transform.position, 
+                transform.rotation
+            );
+
+            fractured.transform.localScale = transform.localScale;
+
+            Rigidbody[] rbs = fractured.GetComponentsInChildren<Rigidbody>();
+            foreach (Rigidbody rb in rbs)
+            {
+                rb.AddExplosionForce(explosionForce, hitPoint, explosionRadius, explosionUpward);
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"{gameObject.name}: Fractured Prefab atanmadı!");
         }
 
-        GameObject fractured = Instantiate(
-            fracturedPrefab,
-            transform.position,
-            transform.rotation
-        );
-
-        fractured.transform.localScale = transform.localScale;
-
-        Rigidbody[] rbs = fractured.GetComponentsInChildren<Rigidbody>();
-        foreach (Rigidbody rb in rbs)
+        if (isClock && Clocks.instance != null)
         {
-            rb.AddExplosionForce(explosionForce, hitPoint, explosionRadius, explosionUpward);
+            Clocks.instance.ClockBroken();
         }
 
         Destroy(gameObject);

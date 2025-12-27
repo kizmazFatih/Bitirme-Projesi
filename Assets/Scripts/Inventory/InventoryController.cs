@@ -13,6 +13,9 @@ public class InventoryController : MonoBehaviour
    public SOInventory player_inventory;
    private PlayerInputs playerInputs;
 
+   public Transform dropPoint;
+   public float throwForce = 5f;
+
 
    private bool is_open = false;
 
@@ -49,6 +52,7 @@ public class InventoryController : MonoBehaviour
    {
       playerInputs = GetComponent<FPSController>().playerInputs;
       playerInputs.Interaction.Tab.started += ctx => OpenInventory();
+      playerInputs.Interaction.QButton.started += ctx => DropCurrentItem();
    }
 
 
@@ -80,6 +84,9 @@ public class InventoryController : MonoBehaviour
       temple.item = player_inventory.slots[x].item;
       temple.item_image = player_inventory.slots[x].item_image;
       temple.prefab = player_inventory.slots[x].prefab;
+      temple.worldInstance = player_inventory.slots[x].worldInstance = null;
+      temple.capturedTexture = player_inventory.slots[x].capturedTexture = null;
+      temple.storedObjectPrefab = player_inventory.slots[x].storedObjectPrefab = null;
 
 
       player_inventory.slots[x].isFull = player_inventory.slots[y].isFull;
@@ -87,18 +94,26 @@ public class InventoryController : MonoBehaviour
       player_inventory.slots[x].item = player_inventory.slots[y].item;
       player_inventory.slots[x].item_image = player_inventory.slots[y].item_image;
       player_inventory.slots[x].prefab = player_inventory.slots[y].prefab;
+      player_inventory.slots[x].worldInstance = player_inventory.slots[y].worldInstance = null;
+      player_inventory.slots[x].capturedTexture = player_inventory.slots[y].capturedTexture = null;
+      player_inventory.slots[x].storedObjectPrefab = player_inventory.slots[y].storedObjectPrefab = null;
+
 
       player_inventory.slots[y].isFull = temple.isFull;
       player_inventory.slots[y].amount = temple.amount;
       player_inventory.slots[y].item = temple.item;
       player_inventory.slots[y].item_image = temple.item_image;
       player_inventory.slots[y].prefab = temple.prefab;
+      player_inventory.slots[y].worldInstance = temple.worldInstance;
+      player_inventory.slots[y].capturedTexture = temple.capturedTexture;
+      player_inventory.slots[y].storedObjectPrefab = temple.storedObjectPrefab;
 
       Handle.instance.SetHandlePrefab();
    }
 
    public void DeleteItem(int slot_index)
    {
+
       Destroy(T_slots[slot_index].transform.GetChild(0).gameObject);
 
       player_inventory.slots[slot_index].isFull = false;
@@ -106,6 +121,9 @@ public class InventoryController : MonoBehaviour
       player_inventory.slots[slot_index].item = null;
       player_inventory.slots[slot_index].item_image = null;
       player_inventory.slots[slot_index].prefab = null;
+      player_inventory.slots[slot_index].worldInstance = null;
+      player_inventory.slots[slot_index].capturedTexture = null;
+      player_inventory.slots[slot_index].storedObjectPrefab = null;
 
       Handle.instance.SetHandlePrefab();
       UpdateSlotUI(slot_index);
@@ -127,11 +145,54 @@ public class InventoryController : MonoBehaviour
       return x;
    }
 
-   /* public void DropItem(int slot_index)
+   void DropCurrentItem()
    {
-      
-      DeleteItem(slot_index);
-   }*/
+      int currentIndex = Handle.instance.index;
+      Slot currentSlot = player_inventory.slots[currentIndex];
+
+      // Eğer slot boşsa hiçbir şey yapma
+      if (!currentSlot.isFull) return;
+
+      // --- FOTOĞRAF KONTROLÜ ---
+      // Eğer bu bir fotoğrafsa (capturedTexture doluysa), dünyada bir kopyası yoktur.
+      // Direkt siliyoruz ve fonksiyondan çıkıyoruz (return).
+      if (currentSlot.capturedTexture != null)
+      {
+         Debug.Log("Fotoğraf direkt silindi.");
+         DeleteItem(currentIndex);
+         return;
+      }
+
+      // --- DİĞER EŞYALAR İÇİN (Balyoz, Kamera vb.) ---
+      if (currentSlot.worldInstance != null)
+      {
+         Debug.Log("Objeyi fırlat: " + currentSlot.item.name);
+         GameObject objToDrop = currentSlot.worldInstance;
+
+         // 1. Objeyi fırlatılacak noktaya taşı
+         objToDrop.transform.position = Camera.main.transform.position;
+         objToDrop.transform.rotation = dropPoint.rotation;
+
+         // 2. Görünürlüğü ve Collider'ı tekrar aç
+         objToDrop.GetComponent<MeshRenderer>().enabled = true;
+         if (objToDrop.GetComponent<Collider>() != null) objToDrop.GetComponent<Collider>().enabled = true;
+         foreach (var r in objToDrop.GetComponentsInChildren<Renderer>()) r.enabled = true;
+
+         // 3. Fizik uygula
+         Rigidbody rb = objToDrop.GetComponent<Rigidbody>();
+         if (rb != null)
+         {
+            rb.isKinematic = false;
+            rb.AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
+         }
+
+         // 4. Envanterden sil
+         DeleteItem(currentIndex);
+
+         // 5. Elindeki görseli temizle
+         Handle.instance.SetHandlePrefab();
+      }
+   }
 
 
 
