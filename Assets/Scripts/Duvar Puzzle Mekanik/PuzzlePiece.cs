@@ -8,6 +8,7 @@ public class PuzzlePiece : MonoBehaviour, IInteractable, Copyable
 
     private Rigidbody rb;
     private Collider col;
+    public bool isPlaced;
 
     private void Awake()
     {
@@ -44,6 +45,7 @@ public class PuzzlePiece : MonoBehaviour, IInteractable, Copyable
             GetComponent<MeshRenderer>().enabled = false;
             if (GetComponent<Rigidbody>() != null) GetComponent<Rigidbody>().isKinematic = true;
             if (GetComponent<Collider>() != null) GetComponent<Collider>().enabled = false;
+            isPlaced = false;
 
             Handle.instance.SetHandlePrefab(); // Elindeki görüntüyü güncelle
         }
@@ -53,12 +55,18 @@ public class PuzzlePiece : MonoBehaviour, IInteractable, Copyable
     // Yerleştiğinde fiziklerini kapatmak için yardımcı fonksiyon
     public void Freeze()
     {
+        isPlaced = true;
         if (col != null) col.enabled = true;
         GetComponent<MeshRenderer>().enabled = true;
+        transform.localScale = new Vector3(1, 1, 0.05f);
     }
 
     public GameObject MyObject()
     {
         return this.gameObject;
+    }
+    public bool ShowMyUI()
+    {
+        return true;
     }
 }

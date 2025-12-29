@@ -35,6 +35,10 @@ public class CameraMachine : MonoBehaviour, IInteractable
             foreach (var r in GetComponentsInChildren<Renderer>()) r.enabled = false;
         }
     }
+    public bool ShowMyUI()
+    {
+        return true;
+    }
 
     private void Update()
     {

@@ -27,4 +27,8 @@ public class Drawer : MonoBehaviour , IInteractable
       else
       animator.SetBool("isOpen",isOpen);
     }
+    public bool ShowMyUI()
+    {
+        return true;
+    }
 }

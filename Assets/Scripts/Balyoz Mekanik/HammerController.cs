@@ -44,11 +44,11 @@ public class HammerController : MonoBehaviour, IInteractable
         // --- KRİTİK KONTROL: Eğer balyoz elde değilse çalışma ---
         if (!IsHammerEquipped())
         {
-            ClearHighlight(); // Başka eşyaya geçince parlamayı temizle
+            //ClearHighlight(); // Başka eşyaya geçince parlamayı temizle
             return;
         }
 
-        HandleHighlight();
+        //HandleHighlight();
 
         // Merkezi InputController üzerinden sol tık kontrolü
         if (InputController.instance != null &&
@@ -71,7 +71,7 @@ public class HammerController : MonoBehaviour, IInteractable
         return currentItem != null && currentItem == item;
     }
 
-    void HandleHighlight()
+   /* void HandleHighlight()
     {
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, highlightDistance))
@@ -103,7 +103,7 @@ public class HammerController : MonoBehaviour, IInteractable
             lastRenderer.material.color = originalColor;
             lastRenderer = null;
         }
-    }
+    }*/
 
     void DoHit()
     {
@@ -118,6 +118,10 @@ public class HammerController : MonoBehaviour, IInteractable
                 destructible.Break(hit.point);
             }
         }
+    }
+    public bool ShowMyUI()
+    {
+        return true;
     }
 
 

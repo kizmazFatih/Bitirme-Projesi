@@ -34,7 +34,7 @@ public class InteractionSystem : MonoBehaviour
 
             if (interactable != null)
             {
-                if (interactUI) interactUI.SetActive(true);
+                if (interactUI) interactUI.SetActive(interactable.ShowMyUI());
 
                 if (InputController.instance.playerInputs.Interaction.Interact.WasPerformedThisFrame())
                 {

@@ -27,9 +27,14 @@ public class PandoraBox : MonoBehaviour, IInteractable
 
             if (copyObject != null)
             {
-                Instantiate(copyObject, spawnPoint.position, spawnPoint.rotation);
+                var newObj = Instantiate(copyObject, spawnPoint.position, spawnPoint.rotation, parent: null);
+                if(newObj.TryGetComponent(out Key keyCode)) keyCode.iClone = true;
+
                 InventoryController.instance.DeleteItem(Handle.instance.index);
-                Debug.Log("girdi");
+                
+                newObj.GetComponent<MeshRenderer>().enabled = true;
+                newObj.GetComponent<Collider>().enabled = true;
+                newObj.GetComponent<Rigidbody>().isKinematic = false;
             }
         }
         else
@@ -37,6 +42,10 @@ public class PandoraBox : MonoBehaviour, IInteractable
             Debug.Log("There is no CopyableObject");
         }
 
+    }
+    public bool ShowMyUI()
+    {
+        return true;
     }
 
 

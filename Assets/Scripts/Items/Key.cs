@@ -1,11 +1,22 @@
 using UnityEngine;
 
-public class Key :MonoBehaviour, IInteractable
+public class Key : MonoBehaviour, IInteractable, Copyable, IResetable
 {
     public SOItem item;
+    private Transform parentObject;
+    public bool iClone = false;
+
+    private void Start()
+    {
+        if (transform.parent != null)
+        { parentObject = transform.parent.transform; }
+    }
+
     public void Interact()
     {
-       var player_inventory = InventoryController.instance.player_inventory;
+        if (transform.parent != null) transform.parent = null;
+
+        var player_inventory = InventoryController.instance.player_inventory;
 
         // 'this.gameObject' referansını gönderiyoruz (worldInstance için)
         if (player_inventory.AddItem(item, item.my_amount, this.gameObject))
@@ -18,4 +29,23 @@ public class Key :MonoBehaviour, IInteractable
         }
     }
 
+    public GameObject MyObject()
+    {
+        return this.gameObject;
+    }
+
+    public void ResetOnLoop()
+    {
+        if (!iClone)
+        {
+            transform.parent = parentObject;
+            GetComponent<MeshRenderer>().enabled = true;
+            GetComponent<Collider>().enabled = true;
+        }
+        else { transform.position = Vector3.zero; }
+    }
+    public bool ShowMyUI()
+    {
+        return true;
+    }
 }

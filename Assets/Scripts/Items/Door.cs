@@ -1,39 +1,66 @@
 using UnityEngine;
 
-public class Door : MonoBehaviour, IInteractable
+public class Door : MonoBehaviour, IInteractable, IResetable
 {
   [SerializeField] private SOItem my_key;
   private bool isOpen = false;
-  [SerializeField] private bool isLocked = true;
+
+  public bool isLocked;
+  public bool mainDoor;
   private Animator animator;
 
   private void Start()
   {
     animator = GetComponent<Animator>();
+   
   }
 
   public void Interact()
   {
-    var playerInventory = InventoryController.instance.player_inventory;
 
-
-
-    for (int i = 0; i < playerInventory.slots.Count; i++)
+    if (mainDoor)
+    {
+      Debug.Log("Kapıyı açmak için 1. kattaki puzzleı tamamlaman lazım");
+    }
+    else
     {
 
-      if (playerInventory.slots[i].item == my_key)
+
+      var playerInventory = InventoryController.instance.player_inventory;
+
+
+
+      for (int i = 0; i < playerInventory.slots.Count; i++)
       {
-        isLocked = false;
-        InventoryController.instance.DecreaseItemAmount(i);
-        break;
+
+        if (playerInventory.slots[i].item == my_key)
+        {
+          isLocked = false;
+          InventoryController.instance.DeleteItem(i);
+          break;
+        }
+      }
+
+      if (!isLocked)
+      {
+        isOpen = !isOpen;
+        animator.SetBool("isOpen", isOpen);
       }
     }
 
-    if (!isLocked)
-    {
-      isOpen = !isOpen;
-      animator.SetBool("isOpen", isOpen);
-    }
 
   }
+
+  public void ResetOnLoop()
+  {
+    isOpen = false;
+    animator.SetBool("isOpen", isOpen);
+    isLocked = true;
+   
+  }
+
+    public bool ShowMyUI()
+    {
+        return true;
+    }
 }

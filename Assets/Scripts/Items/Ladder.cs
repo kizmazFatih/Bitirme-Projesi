@@ -10,6 +10,10 @@ public class Ladder : PlaceableObject,IInteractable
        player_inventory.AddItem(item, item.my_amount);
        Destroy(this.gameObject);
     }
+    public bool ShowMyUI()
+    {
+        return true;
+    }
 
 
     

@@ -55,8 +55,12 @@ public class PuzzleSlot : MonoBehaviour, IInteractable
         // Vurguyu kapat
         SetHighlight(false);
 
-        // Manager'a kontrol ettir
-        PuzzleManager.instance.CheckCompletion();
+        // Parçanın correctIndex'i ile slotIndex'i uyuşuyor mu?
+        if (piece.itemData.correctIndex == slotIndex)
+        {
+            PuzzleManager.instance.correctCount++;
+            PuzzleManager.instance.CheckCompletion();
+        }
     }
 
     // Bu fonksiyonu Interaction sisteminden çağıracağız
@@ -64,5 +68,9 @@ public class PuzzleSlot : MonoBehaviour, IInteractable
     {
         if (highlightObject != null)
             highlightObject.SetActive(state);
+    }
+    public bool ShowMyUI()
+    {
+        return true;
     }
 }

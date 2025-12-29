@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
 using Cinemachine;
+using Unity.VisualScripting;
 
 public class InventoryController : MonoBehaviour
 {
@@ -53,6 +54,48 @@ public class InventoryController : MonoBehaviour
       playerInputs = GetComponent<FPSController>().playerInputs;
       playerInputs.Interaction.Tab.started += ctx => OpenInventory();
       playerInputs.Interaction.QButton.started += ctx => DropCurrentItem();
+      for (int i = 0; i < player_inventory.slots.Count; i++)
+      {
+         if (player_inventory.slots[i].isFull)
+         { DeleteItem(i); }
+      }
+
+      UpdateAllSlotUI();
+
+
+   }
+   public void CleanPhysicalItemsForLoop()
+   {
+      // Envanterdeki tüm slotları tek tek kontrol et
+      for (int i = 0; i < player_inventory.slots.Count; i++)
+      {
+         Slot currentSlot = player_inventory.slots[i];
+
+         // Slot dolu mu?
+         if (currentSlot.isFull && currentSlot.item != null)
+         {
+            // --- KORUMA ŞARTLARI ---
+
+            // 1. Şart: Eğer bu bir fotoğrafsa (texture varsa) silme, bir sonraki döngüye taşı.
+            if (currentSlot.capturedTexture != null) continue;
+
+            // 2. Şart: Eğer bu ana eşyan olan "Camera" ise silme.
+            // (Item ismini SOItem içindeki 'itemName' değişkenine göre kontrol et)
+            if (currentSlot.item.my_prefab.tag == "PhotoMachine") continue;
+
+            // --- SİLME İŞLEMİ ---
+            // Yukarıdaki şartlara uymayan her şeyi (fiziksel objeler) temizle
+            DeleteItem(i);
+         }
+      }
+
+      // Envanter temizlendikten sonra elindeki görseli (Handle) güncelle
+      if (Handle.instance != null)
+      {
+         Handle.instance.SetHandlePrefab();
+      }
+
+      Debug.Log("<color=yellow>Envanter Temizlendi: Fiziksel eşyalar silindi, fotoğraflar korundu.</color>");
    }
 
 
@@ -70,6 +113,21 @@ public class InventoryController : MonoBehaviour
       Handle.instance.SetHandlePrefab();
 
    }
+   public void UpdateAllSlotUI()
+   {
+      for (int i = 0; i < T_slots.Count; i++)
+      {
+         Slot currentSlot = player_inventory.slots[i];
+         if (currentSlot.isFull == true)
+         {
+            Instantiate(UI_prefab, T_slots[i]);
+            T_slots[i].GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = player_inventory.slots[i].amount.ToString();
+
+            T_slots[i].GetChild(0).GetComponent<RawImage>().texture = player_inventory.slots[i].item_image;
+            Handle.instance.SetHandlePrefab();
+         }
+      }
+   }
 
    public void ChangeSlotsEach(Transform slot1, Transform slot2)
    {
@@ -84,9 +142,9 @@ public class InventoryController : MonoBehaviour
       temple.item = player_inventory.slots[x].item;
       temple.item_image = player_inventory.slots[x].item_image;
       temple.prefab = player_inventory.slots[x].prefab;
-      temple.worldInstance = player_inventory.slots[x].worldInstance = null;
-      temple.capturedTexture = player_inventory.slots[x].capturedTexture = null;
-      temple.storedObjectPrefab = player_inventory.slots[x].storedObjectPrefab = null;
+      temple.worldInstance = player_inventory.slots[x].worldInstance;
+      temple.capturedTexture = player_inventory.slots[x].capturedTexture;
+      temple.storedObjectPrefab = player_inventory.slots[x].storedObjectPrefab;
 
 
       player_inventory.slots[x].isFull = player_inventory.slots[y].isFull;
@@ -94,9 +152,9 @@ public class InventoryController : MonoBehaviour
       player_inventory.slots[x].item = player_inventory.slots[y].item;
       player_inventory.slots[x].item_image = player_inventory.slots[y].item_image;
       player_inventory.slots[x].prefab = player_inventory.slots[y].prefab;
-      player_inventory.slots[x].worldInstance = player_inventory.slots[y].worldInstance = null;
-      player_inventory.slots[x].capturedTexture = player_inventory.slots[y].capturedTexture = null;
-      player_inventory.slots[x].storedObjectPrefab = player_inventory.slots[y].storedObjectPrefab = null;
+      player_inventory.slots[x].worldInstance = player_inventory.slots[y].worldInstance;
+      player_inventory.slots[x].capturedTexture = player_inventory.slots[y].capturedTexture;
+      player_inventory.slots[x].storedObjectPrefab = player_inventory.slots[y].storedObjectPrefab;
 
 
       player_inventory.slots[y].isFull = temple.isFull;
@@ -113,8 +171,8 @@ public class InventoryController : MonoBehaviour
 
    public void DeleteItem(int slot_index)
    {
-
-      Destroy(T_slots[slot_index].transform.GetChild(0).gameObject);
+      if (T_slots[slot_index].childCount > 0)
+      { Destroy(T_slots[slot_index].transform.GetChild(0).gameObject); }
 
       player_inventory.slots[slot_index].isFull = false;
       player_inventory.slots[slot_index].amount = 0;
@@ -152,7 +210,7 @@ public class InventoryController : MonoBehaviour
 
       // Eğer slot boşsa hiçbir şey yapma
       if (!currentSlot.isFull) return;
-
+      Debug.Log("Objeyi fırlat: " + currentSlot.item.name);
       // --- FOTOĞRAF KONTROLÜ ---
       // Eğer bu bir fotoğrafsa (capturedTexture doluysa), dünyada bir kopyası yoktur.
       // Direkt siliyoruz ve fonksiyondan çıkıyoruz (return).

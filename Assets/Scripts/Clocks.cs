@@ -1,20 +1,30 @@
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic; // List kullanabilmek için ekledik
 
 public class Clocks : MonoBehaviour
 {
-    public static Clocks instance; // Diğer kodlardan ulaşmak için
+    public static Clocks instance;
 
     [Header("Saat Takibi")]
     public int broken_clocks = 0;
     public int total_clocks_needed = 5;
+    [Header("Player")]
+    [SerializeField] private GameObject player;
+    [SerializeField] private Transform playerSpawnPoint;
 
     [Header("Zaman Ayarları")]
-    public float time ;
+    public float startTime = 300f; // Başlangıç süresi (örn: 5 dakika)
+    public float time;
     public int hour = 0;
     public int seconds;
-    public bool timeStopped = false; // Zaman durdu mu?
-    public bool gameOver = false;    // Saat 10 oldu mu?
+    public bool timeStopped = false;
+    public bool gameOver = false;
+
+    [Header("Sıfırlanacak Objeler")]
+    public List<GameObject> resetableObjects = new List<GameObject>(); // Inspector'da sıfırlanacakları buraya at
+    private List<Vector3> startPositions = new List<Vector3>();
+    private List<Quaternion> startRotations = new List<Quaternion>();
 
     [Header("Text")]
     [SerializeField] private TextMeshProUGUI timeText;
@@ -26,59 +36,127 @@ public class Clocks : MonoBehaviour
 
     void Start()
     {
-        broken_clocks = 0;
-        time = 600;
-        timeStopped = false;
-        gameOver = false;
+        time = startTime; // Başlangıçta süreyi ata
+        SaveInitialStates();
+        ResetStats();
+    }
+
+    // Objelerin ilk yerlerini kaydet
+    void SaveInitialStates()
+    {
+        foreach (GameObject obj in resetableObjects)
+        {
+            startPositions.Add(obj.transform.position);
+            startRotations.Add(obj.transform.rotation);
+        }
     }
 
     void Update()
     {
-        // Eğer zaman durduysa veya oyun bittiyse ilerleme
         if (timeStopped || gameOver) return;
 
-        // Zamanı ilerlet
         time -= Time.deltaTime;
 
-        // Kaybetme Şartı: Saat 10 olursa
-        if (time <= 0) 
-        { 
-            gameOver = true;
-            Debug.Log("Zaman doldu! Oyun bitti.");
+        if (time <= 0)
+        {
+            // SÜRE BİTTİĞİNDE LOOP BAŞLASIN
+            StartCoroutine(ResetLoopSequence());
         }
         UpdateUI();
     }
+
+    // --- LOOP SIFIRLAMA MANTIĞI ---
+    System.Collections.IEnumerator ResetLoopSequence()
+    {
+        gameOver = true;
+        Debug.Log("<color=red>LOOP BAŞLADI: Zaman Başa Sarılıyor!</color>");
+
+        // 1. Opsiyonel: Buraya bir ekran karartma (VFX) ekleyebilirsin
+        yield return new WaitForSeconds(0.5f);
+
+        // 2. Dünyadaki Objeleri Sıfırla
+        for (int i = 0; i < resetableObjects.Count; i++)
+        {
+            GameObject obj = resetableObjects[i];
+
+
+            obj.transform.position = startPositions[i];
+            obj.transform.rotation = startRotations[i];
+            obj.SetActive(true); // Gizlenenleri geri getir (envantere alınanlar gibi)
+
+            if (obj.TryGetComponent(out Rigidbody rb))
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+        }
+
+        // 3. Envanteri Temizle (Fotoğraflar Hariç)
+        InventoryController.instance.CleanPhysicalItemsForLoop();
+
+        // 4. Değişkenleri ve Zamanı Sıfırla
+        time = startTime;
+        gameOver = false;
+        broken_clocks = 0; // İstersen saat ilerlemesini de sıfırlayabilirsin
+
+        //-------------------------------
+        //OYUNCUYU BAŞLANGICA IŞINLAMA
+        CharacterController cc = player.GetComponent<CharacterController>();
+
+        if (cc != null)
+        {
+            // 1. KONTROLÜ DEVRE DIŞI BIRAK (Teleport için şart)
+            cc.enabled = false;
+
+            // 2. POZİSYONU ATAYIN
+            // Not: Vector3 kullanıyorsan 'spawnPoint', Transform kullanıyorsan 'spawnPoint.position'
+            player.transform.position = playerSpawnPoint.position;
+
+            // 3. KONTROLÜ TEKRAR AÇ
+            cc.enabled = true;
+
+            Debug.Log("CharacterController başarıyla ışınlandı.");
+        }
+        //-------------------------------
+
+        
+        // 5. Sıfırlanacak Objeleri Sıfırla
+        //--------------------------------------------------------------
+        MonoBehaviour[] allScripts = FindObjectsOfType<MonoBehaviour>();
+
+        foreach (MonoBehaviour script in allScripts)
+        {
+            // Eğer bu script IResetable arayüzünü taşıyorsa
+            if (script is IResetable resetableObject)
+            {
+                resetableObject.ResetOnLoop();
+            }
+        }
+        //--------------------------------------------------------------
+        Debug.Log("<color=cyan>YENİ DÖNGÜ BAŞLADI.</color>");
+    }
+
+    void ResetStats()
+    {
+        broken_clocks = 0;
+        timeStopped = false;
+        gameOver = false;
+    }
+
     void UpdateUI()
     {
         if (timeText == null) return;
-
-        // Dakika ve Saniye hesaplama
         hour = (int)time / 60;
         seconds = (int)time % 60;
-
-        // Formatlama: {0} dakika, {1:00} saniye (saniye her zaman 2 hane görünür, örn: 7:06)
         timeText.text = string.Format("{0}:{1:00}", hour, seconds);
     }
 
-    // Saat kırıldığında çağrılacak fonksiyon
     public void ClockBroken()
     {
         broken_clocks++;
-        Debug.Log($"Saat Kırıldı! Toplam: {broken_clocks}");
-
-        // Kazanma Şartı: 5 saat kırılırsa zamanı durdur
-        if (broken_clocks >= total_clocks_needed)
-        {
-            StopAllTime();
-        }
+        if (broken_clocks >= total_clocks_needed) StopAllTime();
     }
 
-    void StopAllTime()
-    {
-        timeStopped = true;
-        Debug.Log("<color=green>TÜM SAATLER KIRILDI, ZAMAN DURDURULDU!</color>");
-        
-        // İstersen burada Time.timeScale = 0; yaparak tüm oyunu dondurabilirsin
-        // Time.timeScale = 0f; 
-    }
+    void StopAllTime() { timeStopped = true; }
+
 }

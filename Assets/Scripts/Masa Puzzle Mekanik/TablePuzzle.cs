@@ -124,7 +124,7 @@ public class TablePuzzle : MonoBehaviour
     private void EnterPuzzle()
     {
         puzzleActive = true;
-
+        Clocks.instance.timeStopped = true;
         // InteractionSystem'ı bul ve kapat (Hata vermesini engeller)
         InteractionSystem interaction = FindObjectOfType<InteractionSystem>();
         if (interaction != null) interaction.enabled = false;
@@ -148,6 +148,7 @@ public class TablePuzzle : MonoBehaviour
     private void ExitPuzzle()
     {
         puzzleActive = false;
+        Clocks.instance.timeStopped = false;
 
         // InteractionSystem'ı tekrar aç
         InteractionSystem interaction = FindObjectOfType<InteractionSystem>();
@@ -256,7 +257,7 @@ public class TablePuzzle : MonoBehaviour
             reward.transform.SetParent(goalTile);
         }
 
-       
+
 
         // --- YENİ: Otomatik Moddan Çıkış ---
         yield return new WaitForSeconds(autoExitDelay);
