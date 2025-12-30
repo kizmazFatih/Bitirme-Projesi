@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb21e4d8-586c-4b3d-b50f-62bb8269414a" name="Changes" comment="" />
+    <list default="true" id="fb21e4d8-586c-4b3d-b50f-62bb8269414a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Bitirme-Projesi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Bitirme-Projesi/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,9 +16,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Emre/MasaPuzzle/PuzzleButton3D.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Emre/MasaPuzzle/TablePuzzle.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Emre/MasaPuzzle/simplefpscontr.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/MainMenu/BackgroundHypnosis.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/MainMenu/MainMenuController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/CarWaypointFollower.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/EventDispatcher.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
@@ -32,7 +34,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Emre&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;emreSinematik&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -94,6 +96,10 @@
       <workItem from="1765018512739" duration="479000" />
       <workItem from="1765018999723" duration="760000" />
       <workItem from="1765020188185" duration="1222000" />
+      <workItem from="1767098929455" duration="751000" />
+      <workItem from="1767110856834" duration="5000" />
+      <workItem from="1767111022279" duration="397000" />
+      <workItem from="1767111425328" duration="65000" />
     </task>
     <servers />
   </component>
