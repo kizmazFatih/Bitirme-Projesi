@@ -6,19 +6,27 @@ public class MainMenuController : MonoBehaviour
     public string gameSceneName = "Game";
 
     public void StartGame()
-    {
-        SceneManager.LoadScene(gameSceneName);
-    }
+{
+    GameLaunchContext.PlayIntro = true;
+    GameLaunchContext.IsContinue = false;
+
+    Debug.Log($"[MENU] StartGame clicked. PlayIntro={GameLaunchContext.PlayIntro}, IsContinue={GameLaunchContext.IsContinue}");
+
+    SceneManager.LoadScene(gameSceneName);
+}
+
 
     public void ContinueGame()
     {
-        // burada save sistemine göre load yaparsın
+        // genelde continue'da intro oynatmayız
+        GameLaunchContext.PlayIntro = false;
+        GameLaunchContext.IsContinue = true;
+
         SceneManager.LoadScene(gameSceneName);
     }
 
     public void OpenSettings()
     {
-        // Settings panelini aç/kapat mantığı
         Debug.Log("Settings opened");
     }
 

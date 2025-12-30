@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fb21e4d8-586c-4b3d-b50f-62bb8269414a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Bitirme-Projesi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Bitirme-Projesi/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Emre/MainMenu/MainMenuController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Emre/MainMenu/MainMenuController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +19,15 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Emre/MainMenu/BackgroundHypnosis.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Emre/MainMenu/MainMenuController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/CarWaypointFollower.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/MainMenu/MainMenuController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/MainMenu/MenuButtonFX.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/CameraRenderGate.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/CarWaypointFollower.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/GameIntroCinematicController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/GameLaunchContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/GameSceneEntry.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/EventDispatcher.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Clocks.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -99,7 +107,21 @@
       <workItem from="1767098929455" duration="751000" />
       <workItem from="1767110856834" duration="5000" />
       <workItem from="1767111022279" duration="397000" />
-      <workItem from="1767111425328" duration="65000" />
+      <workItem from="1767111425328" duration="950000" />
+      <workItem from="1767114431584" duration="5000" />
+      <workItem from="1767114486403" duration="103000" />
+      <workItem from="1767114594685" duration="38000" />
+      <workItem from="1767114636819" duration="432000" />
+      <workItem from="1767115073855" duration="205000" />
+      <workItem from="1767115301410" duration="541000" />
+      <workItem from="1767115847730" duration="18000" />
+      <workItem from="1767115875867" duration="42000" />
+      <workItem from="1767115921459" duration="63000" />
+      <workItem from="1767115988137" duration="51000" />
+      <workItem from="1767116042120" duration="611000" />
+      <workItem from="1767116924217" duration="4000" />
+      <workItem from="1767116991493" duration="44000" />
+      <workItem from="1767117039484" duration="32000" />
     </task>
     <servers />
   </component>
