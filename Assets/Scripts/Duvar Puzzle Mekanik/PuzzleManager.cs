@@ -13,18 +13,6 @@ public class PuzzleManager : MonoBehaviour, IResetable
     public void CheckCompletion()
     {
 
-        /*foreach (var slot in allSlots)
-        {
-            if (slot.currentPiece != null)
-            {
-                // Parçanın içindeki correctIndex ile slotun slotIndex'i uyuşuyor mu?
-                if (slot.currentPiece.itemData.correctIndex == slot.slotIndex)
-                {
-                    correctCount++;
-                    Debug.Log("correctCount: " + correctCount);
-                }
-            }
-        }*/
 
         if (correctCount >= 9)
         {

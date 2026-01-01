@@ -5,28 +5,37 @@ public class Carpet : MonoBehaviour, IInteractable
 {
     private bool bounce = true;
 
-    public string GetInteractText()
-    {
-        return null;
-    }
+    [SerializeField] private Vector3 offset;
+    private Vector3 normalPosition;
+    private Vector3 nextPosition;
 
+
+    private void Awake()
+    {
+        normalPosition = transform.localPosition;
+        nextPosition = normalPosition + offset;
+    }
     public void Interact()
     {
         if (bounce)
         {
-            transform.DORotate(new Vector3(0, -12, 0), 1f);
-            transform.DOMove(transform.position + transform.right * 2f, 1f);
+            transform.DOLocalRotate(new Vector3(0, -12, 0), 1f);
+            transform.DOLocalMove(nextPosition, 1f);
         }
         else
         {
-            transform.DORotate(new Vector3(0, 12, 0), 1f);
-            transform.DOMove(transform.position + transform.right * -2f, 1f);
+            transform.DOLocalRotate(new Vector3(0, 12, 0), 1f);
+            transform.DOLocalMove(normalPosition, 1f);
         }
         bounce = !bounce;
     }
     public bool ShowMyUI()
     {
         return false;
+    }
+    public string GetInteractText()
+    {
+        return null;
     }
 
 

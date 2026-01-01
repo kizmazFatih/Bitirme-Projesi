@@ -28,13 +28,14 @@ public class Handle : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
+        cam = Camera.main;
+        mesh = GetComponent<MeshFilter>();
+        meshrenderer = GetComponent<MeshRenderer>();
     }
 
     void Start()
     {
-        cam = Camera.main;
-        mesh = GetComponent<MeshFilter>();
-        meshrenderer = GetComponent<MeshRenderer>();
+
         playerInputs = player_controller.playerInputs;
 
         playerInputs.Interaction.Number1.performed += _ => SelectSlot(0);

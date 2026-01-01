@@ -137,6 +137,10 @@ public class GameIntroCinematicController : MonoBehaviour
         if (gameplayVCam) gameplayVCam.SetActive(true);
         Clocks.instance.timeStopped = false;
 
+        if (SubtitleManager.instance != null)
+        {
+            SubtitleManager.instance.ShowSubtitle("Evden çıkmak için orta katta duvarda bulunan resmi tamamla.", 6f);
+        }
 
         // Aynı session’da tekrar load olursa intro tekrar oynamasın diye
         GameLaunchContext.PlayIntro = false;

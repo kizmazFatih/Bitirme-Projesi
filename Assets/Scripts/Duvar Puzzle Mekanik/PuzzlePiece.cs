@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PuzzlePiece : MonoBehaviour, IInteractable, Copyable
+public class PuzzlePiece : MonoBehaviour, IInteractable, Copyable,IResetable
 {
     public PuzzleItem itemData;
     private Renderer rend;
@@ -73,5 +73,13 @@ public class PuzzlePiece : MonoBehaviour, IInteractable, Copyable
     public string GetInteractText()
     {
         return "Puzzle parçası";
+    }
+
+    public void ResetOnLoop()
+    {
+        rb.isKinematic = true;
+        col.enabled = true;
+        rend.enabled = true;
+        transform.localScale = new Vector3(0.5f, 0.5f, 0.05f);
     }
 }
