@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fb21e4d8-586c-4b3d-b50f-62bb8269414a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Bitirme-Projesi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Bitirme-Projesi/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Emre/MainMenu/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Emre/MainMenu/MainMenu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Emre/MainMenu/MenuButtonFX.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Emre/MainMenu/MenuButtonFX.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Emre/MainMenu/UIRevealSequence.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Emre/MainMenu/UIRevealSequence.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Emre/SinematikIntro/GameIntroCinematicController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Emre/SinematikIntro/GameIntroCinematicController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/URP Asset.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/URP Asset.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,9 +23,9 @@
     <setting file="file://$PROJECT_DIR$/Assets/Emre/MainMenu/MainMenuController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Emre/MainMenu/MenuButtonFX.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Emre/MainMenu/PauseMenuController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/CameraRenderGate.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/CameraRenderGate.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/CarWaypointFollower.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/GameIntroCinematicController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/GameIntroCinematicController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/GameLaunchContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Emre/SinematikIntro/GameSceneEntry.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/EventDispatcher.cs" root0="FORCE_HIGHLIGHTING" />
@@ -130,7 +126,10 @@
       <workItem from="1767117039484" duration="1851000" />
       <workItem from="1767269366979" duration="45000" />
       <workItem from="1767269416076" duration="607000" />
-      <workItem from="1767270729520" duration="6000" />
+      <workItem from="1767270729520" duration="1199000" />
+      <workItem from="1767275780851" duration="488000" />
+      <workItem from="1767276280923" duration="142000" />
+      <workItem from="1767276479641" duration="13000" />
     </task>
     <servers />
   </component>
