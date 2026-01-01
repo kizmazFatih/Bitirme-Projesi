@@ -18,7 +18,7 @@ public class Clocks : MonoBehaviour
     public float time;
     public int hour = 0;
     public int seconds;
-    public bool timeStopped = false;
+    public bool timeStopped ;
     public bool gameOver = false;
 
     [Header("Sıfırlanacak Objeler")]
@@ -39,6 +39,7 @@ public class Clocks : MonoBehaviour
         time = startTime; // Başlangıçta süreyi ata
         SaveInitialStates();
         ResetStats();
+        timeStopped = true;
     }
 
     // Objelerin ilk yerlerini kaydet
@@ -119,7 +120,7 @@ public class Clocks : MonoBehaviour
         }
         //-------------------------------
 
-        
+
         // 5. Sıfırlanacak Objeleri Sıfırla
         //--------------------------------------------------------------
         MonoBehaviour[] allScripts = FindObjectsOfType<MonoBehaviour>();

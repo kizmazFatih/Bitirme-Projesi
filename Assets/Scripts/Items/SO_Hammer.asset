@@ -17,6 +17,7 @@ MonoBehaviour:
   my_prefab: {fileID: 8380099851523151312, guid: dec5833351f1c2441913d89b7e0a2fa5, type: 3}
   my_amount: 1
   max_stack: 1
+  my_tooltip: "Balyoz: E\u015Fyalar\u0131 k\u0131rmana yarar"
   heldPosition: {x: -0.7, y: -0.7, z: 1}
   heldRotation: {x: 12, y: -100, z: 0}
   heldScale: {x: 1.8, y: 1.8, z: 1.8}

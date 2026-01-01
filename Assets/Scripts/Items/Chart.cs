@@ -26,4 +26,9 @@ public class Chart : MonoBehaviour, IInteractable, IResetable
   {
     return false;
   }
+
+    public string GetInteractText()
+    {
+        return null;
+    }
 }

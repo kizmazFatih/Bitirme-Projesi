@@ -17,6 +17,8 @@ MonoBehaviour:
   my_prefab: {fileID: 1083316187165631087, guid: dfa4bd4d8115f7140b80431ac796b07e, type: 3}
   my_amount: 1
   max_stack: 1
+  my_tooltip: "Pandora'n\u0131n Kutusu: Foto\u011Fraflar\u0131 ger\xE7ek nesnelere
+    d\xF6n\xFC\u015Ft\xFCr\xFCr."
   heldPosition: {x: 0, y: 0, z: 0}
   heldRotation: {x: 0, y: 0, z: 0}
   heldScale: {x: 1, y: 1, z: 1}

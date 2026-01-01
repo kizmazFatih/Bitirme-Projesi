@@ -73,4 +73,9 @@ public class PuzzleSlot : MonoBehaviour, IInteractable
     {
         return true;
     }
+
+    public string GetInteractText()
+    {
+        return null;
+    }
 }

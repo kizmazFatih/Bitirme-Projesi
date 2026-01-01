@@ -113,6 +113,8 @@ public class GameIntroCinematicController : MonoBehaviour
         // Gameplay aç
         if (playerController) playerController.enabled = true;
         if (gameplayVCam) gameplayVCam.SetActive(true);
+        Clocks.instance.timeStopped = false;
+
 
         // Trafik yine başlasın istersen
         if (carsToStart != null)
@@ -133,6 +135,8 @@ public class GameIntroCinematicController : MonoBehaviour
         // Gameplay devral
         if (playerController) playerController.enabled = true;
         if (gameplayVCam) gameplayVCam.SetActive(true);
+        Clocks.instance.timeStopped = false;
+
 
         // Aynı session’da tekrar load olursa intro tekrar oynamasın diye
         GameLaunchContext.PlayIntro = false;

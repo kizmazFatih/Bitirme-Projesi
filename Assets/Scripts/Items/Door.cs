@@ -63,4 +63,9 @@ public class Door : MonoBehaviour, IInteractable, IResetable
     {
         return true;
     }
+
+    public string GetInteractText()
+    {
+      return null;
+    }
 }

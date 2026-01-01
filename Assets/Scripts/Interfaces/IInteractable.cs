@@ -4,4 +4,5 @@ public interface IInteractable
 {
     void Interact();
     bool ShowMyUI();
+    string GetInteractText();
 }

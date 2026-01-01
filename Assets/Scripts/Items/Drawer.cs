@@ -31,4 +31,9 @@ public class Drawer : MonoBehaviour , IInteractable
     {
         return true;
     }
+
+    public string GetInteractText()
+    {
+        return null;
+    }
 }

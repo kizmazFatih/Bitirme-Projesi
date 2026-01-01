@@ -206,4 +206,9 @@ public class CameraMachine : MonoBehaviour, IInteractable
         if (blackScopeOverlay != null) blackScopeOverlay.SetActive(false);
         if (InputController.instance != null) InputController.instance.playerInputs.Enable();
     }
+
+    public string GetInteractText()
+    {
+        return "Fotoğraf Makinesi";
+    }
 }

@@ -17,6 +17,7 @@ MonoBehaviour:
   my_prefab: {fileID: 3053209306343427865, guid: 57f3bc24cf3bc69489b3299cd17f25eb, type: 3}
   my_amount: 1
   max_stack: 1
+  my_tooltip: "K\u0131rm\u0131z\u0131 Anahtar"
   heldPosition: {x: 0.7, y: -0.4, z: 1}
   heldRotation: {x: 0, y: 0, z: 0}
   heldScale: {x: 7, y: 7, z: 7}

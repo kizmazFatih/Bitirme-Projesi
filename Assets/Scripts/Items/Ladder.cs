@@ -3,7 +3,12 @@ using UnityEngine;
 public class Ladder : PlaceableObject,IInteractable
 {
     public SOItem item;
-    
+
+    public string GetInteractText()
+    {
+        return null;
+    }
+
     public void Interact()
     {
        var player_inventory =InventoryController.instance.player_inventory;

@@ -48,4 +48,9 @@ public class Key : MonoBehaviour, IInteractable, Copyable, IResetable
     {
         return true;
     }
+
+    public string GetInteractText()
+    {
+       return "Anahtar";
+    }
 }

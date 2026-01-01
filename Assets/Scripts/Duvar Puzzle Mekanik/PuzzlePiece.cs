@@ -69,4 +69,9 @@ public class PuzzlePiece : MonoBehaviour, IInteractable, Copyable
     {
         return true;
     }
+
+    public string GetInteractText()
+    {
+        return "Puzzle parçası";
+    }
 }

@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class InteractionSystem : MonoBehaviour
 {
@@ -8,6 +7,8 @@ public class InteractionSystem : MonoBehaviour
     public LayerMask interactLayer;
     public GameObject interactUI; // "E tuşuna bas" görseli
     PuzzleSlot lastHighlightedSlot;
+
+    [SerializeField] private TextMeshProUGUI tooltipText;
 
     private void Update()
     {
@@ -34,18 +35,44 @@ public class InteractionSystem : MonoBehaviour
 
             if (interactable != null)
             {
+                // UI'yı ve Yazıyı Göster
                 if (interactUI) interactUI.SetActive(interactable.ShowMyUI());
+                ShowTooltip(interactable.GetInteractText());
 
                 if (InputController.instance.playerInputs.Interaction.Interact.WasPerformedThisFrame())
                 {
                     interactable.Interact();
                 }
             }
+            else
+            {
+                HideTooltip();
+            }
         }
         else
         {
             if (interactUI) interactUI.SetActive(false);
+            HideTooltip();
             ClearLastSlot();
+        }
+    }
+
+    // Yazıyı günceller ve paneli açar
+    void ShowTooltip(string text)
+    {
+        if (tooltipText != null&& text != null)
+        {
+            tooltipText.text = text;
+            tooltipText.transform.parent.gameObject.SetActive(true);
+        }
+    }
+
+    // Yazıyı gizler
+    void HideTooltip()
+    {
+        if (tooltipText != null)
+        {
+            tooltipText.transform.parent.gameObject.SetActive(false);
         }
     }
 

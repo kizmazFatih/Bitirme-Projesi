@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObjects/Item")]
@@ -9,6 +10,7 @@ public class SOItem : ScriptableObject
     public GameObject my_prefab;
     public int my_amount;
     public int max_stack;
+    public string my_tooltip;
 
     [Header("Elde Tutma Ayarları")]
     public Vector3 heldPosition; // Elimizdeki lokal pozisyonu

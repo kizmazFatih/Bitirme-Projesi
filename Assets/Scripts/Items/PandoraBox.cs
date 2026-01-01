@@ -6,6 +6,7 @@ public class PandoraBox : MonoBehaviour, IInteractable
     public SOItem item;
 
     [SerializeField] Transform spawnPoint;
+
     public void Interact()
     {
         /*var player_inventory = InventoryController.instance.player_inventory;
@@ -45,7 +46,13 @@ public class PandoraBox : MonoBehaviour, IInteractable
     }
     public bool ShowMyUI()
     {
+        
         return true;
+    }
+    // Interface'den gelen yeni metod:
+    public string GetInteractText()
+    {
+        return "Pandora'nın Kutusu: Fotoğrafları gerçek nesnelere dönüştürür.";
     }
 
 

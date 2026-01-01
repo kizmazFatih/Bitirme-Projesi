@@ -17,6 +17,7 @@ MonoBehaviour:
   my_prefab: {fileID: 7501522124711055122, guid: a4b732a50dfb50f48bda155ac260d25f, type: 3}
   my_amount: 1
   max_stack: 1
+  my_tooltip: 
   heldPosition: {x: 0.7, y: -0.4, z: 1}
   heldRotation: {x: 0, y: 0, z: 0}
   heldScale: {x: 1, y: 1, z: 1}

@@ -1,11 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
 using Cinemachine;
-using Unity.VisualScripting;
 
 public class InventoryController : MonoBehaviour
 {
@@ -48,17 +45,20 @@ public class InventoryController : MonoBehaviour
       {
          T_slots.Add(inventory_parent.GetChild(i));
       }
+
+      //Başlangıçta slotları sil
+      for (int i = 0; i < player_inventory.slots.Count; i++)
+      {
+         if (player_inventory.slots[i].isFull)
+         { DeleteItem(i); }
+      }
    }
    private void Start()
    {
       playerInputs = GetComponent<FPSController>().playerInputs;
       playerInputs.Interaction.Tab.started += ctx => OpenInventory();
       playerInputs.Interaction.QButton.started += ctx => DropCurrentItem();
-      for (int i = 0; i < player_inventory.slots.Count; i++)
-      {
-         if (player_inventory.slots[i].isFull)
-         { DeleteItem(i); }
-      }
+
 
       UpdateAllSlotUI();
 

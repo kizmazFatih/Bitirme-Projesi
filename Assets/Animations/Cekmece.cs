@@ -4,12 +4,13 @@ using UnityEngine;
 public class Cekmece : MonoBehaviour, IInteractable
 {
     private bool isOpen = false;
+    [SerializeField] private Vector3 openOffset = new Vector3(-2f, 0, 0);
     Vector3 closePosition;
     Vector3 openPosition;
     private void Start()
     {
         closePosition = transform.localPosition;
-        openPosition = new Vector3(transform.localPosition.x - 2f, transform.localPosition.y, transform.localPosition.z);
+        openPosition = closePosition + openOffset;
     }
     public void Interact()
     {
@@ -29,5 +30,8 @@ public class Cekmece : MonoBehaviour, IInteractable
         return true;
     }
 
-
+    public string GetInteractText()
+    {
+        return null;
+    }
 }

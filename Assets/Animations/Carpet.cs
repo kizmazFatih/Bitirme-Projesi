@@ -4,6 +4,12 @@ using UnityEngine;
 public class Carpet : MonoBehaviour, IInteractable
 {
     private bool bounce = true;
+
+    public string GetInteractText()
+    {
+        return null;
+    }
+
     public void Interact()
     {
         if (bounce)
