@@ -32,11 +32,13 @@ public class MenuButtonFX : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
 
     void Update()
-    {
-        Vector3 target = baseScale * (isHovered ? hoverScale : 1f);
-        currentScale = Vector3.Lerp(currentScale, target, Time.deltaTime * animSpeed);
-        transform.localScale = currentScale;
-    }
+{
+    float dt = Time.unscaledDeltaTime; // pause olsa da akar
+    Vector3 target = baseScale * (isHovered ? hoverScale : 1f);
+    currentScale = Vector3.Lerp(currentScale, target, dt * animSpeed);
+    transform.localScale = currentScale;
+}
+
 
     public void OnPointerEnter(PointerEventData eventData)
     {

@@ -23,8 +23,9 @@ public class UIRevealSequence : MonoBehaviour
     public bool hideLogoWhenButtonsAppear = true;
     public float logoFadeOutDuration = 0.25f;
 
-    void Start()
+    void OnEnable()
     {
+        StopAllCoroutines();
         PrepareHidden(logoGroup, logoTransform);
         PrepareHidden(buttonsGroup, buttonsTransform);
         StartCoroutine(Sequence());
@@ -32,20 +33,24 @@ public class UIRevealSequence : MonoBehaviour
 
     void PrepareHidden(CanvasGroup cg, RectTransform rt)
     {
+        if (!cg || !rt) return;
+
         cg.alpha = 0f;
         cg.interactable = false;
         cg.blocksRaycasts = false;
         rt.localScale = Vector3.one * popScaleFrom;
+
+        // Pause menüde logo daha önce setActive(false) yapıldıysa geri aç:
+        if (!cg.gameObject.activeSelf) cg.gameObject.SetActive(true);
     }
 
     IEnumerator Sequence()
     {
-        yield return new WaitForSeconds(delayBeforeLogo);
+        yield return new WaitForSecondsRealtime(delayBeforeLogo);
         yield return AnimateIn(logoGroup, logoTransform);
 
-        yield return new WaitForSeconds(delayBeforeButtons);
+        yield return new WaitForSecondsRealtime(delayBeforeButtons);
 
-        // Butonlar gelirken logoyu gizle (aynı anda)
         if (hideLogoWhenButtonsAppear)
             StartCoroutine(FadeOutOnly(logoGroup, logoFadeOutDuration));
 
@@ -54,15 +59,16 @@ public class UIRevealSequence : MonoBehaviour
 
     IEnumerator AnimateIn(CanvasGroup cg, RectTransform rt)
     {
+        if (!cg || !rt) yield break;
+
         float t = 0f;
         while (t < fadeDuration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             float p = Mathf.Clamp01(t / fadeDuration);
 
             cg.alpha = p;
             rt.localScale = Vector3.one * Mathf.Lerp(popScaleFrom, popScaleTo, EaseOutBack(p));
-
             yield return null;
         }
 
@@ -74,6 +80,8 @@ public class UIRevealSequence : MonoBehaviour
 
     IEnumerator FadeOutOnly(CanvasGroup cg, float duration)
     {
+        if (!cg) yield break;
+
         cg.interactable = false;
         cg.blocksRaycasts = false;
 
@@ -82,7 +90,7 @@ public class UIRevealSequence : MonoBehaviour
 
         while (t < duration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             float p = Mathf.Clamp01(t / duration);
             cg.alpha = Mathf.Lerp(start, 0f, p);
             yield return null;

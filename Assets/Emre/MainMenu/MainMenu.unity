@@ -378,8 +378,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 205, y: -8.000008}
-  m_SizeDelta: {x: 150, y: 50}
+  m_AnchoredPosition: {x: 300.5, y: -200.7}
+  m_SizeDelta: {x: 70, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &555392378
 MonoBehaviour:
@@ -457,7 +457,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 26665bd52b048450fbd58024e54cf517, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dfdd5d6f9f3b14f38a14fb7461a44a1a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -488,8 +488,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetImage: {fileID: 555392379}
-  idleSprite: {fileID: 21300000, guid: 26665bd52b048450fbd58024e54cf517, type: 3}
-  hoverSprite: {fileID: 21300000, guid: 2bcfa46681a3a45b6a6f5d25ad82a9c4, type: 3}
+  idleSprite: {fileID: 21300000, guid: dfdd5d6f9f3b14f38a14fb7461a44a1a, type: 3}
+  hoverSprite: {fileID: 21300000, guid: 45b8f48ebf87c42a586d67930e5fc16c, type: 3}
   hoverScale: 1.06
   animSpeed: 14
   sfxSource: {fileID: 116208337}
@@ -531,8 +531,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 205, y: -79.00001}
-  m_SizeDelta: {x: 150, y: 50}
+  m_AnchoredPosition: {x: 386, y: -199.7}
+  m_SizeDelta: {x: 70, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &558914603
 MonoBehaviour:
@@ -610,7 +610,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c0664db347e7746d6918adc6c46a6aee, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 60a31e052f71546708ce051f803455a5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -641,8 +641,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetImage: {fileID: 558914604}
-  idleSprite: {fileID: 21300000, guid: c0664db347e7746d6918adc6c46a6aee, type: 3}
-  hoverSprite: {fileID: 21300000, guid: 289cd41d8165e4ddab6514eb1fc2788e, type: 3}
+  idleSprite: {fileID: 21300000, guid: 60a31e052f71546708ce051f803455a5, type: 3}
+  hoverSprite: {fileID: 21300000, guid: 86523f51f8ebe424e92a44516b47c01c, type: 3}
   hoverScale: 1.06
   animSpeed: 14
   sfxSource: {fileID: 116208337}
@@ -1342,7 +1342,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -194, y: -11}
+  m_AnchoredPosition: {x: -0.3, y: -0.8}
   m_SizeDelta: {x: 200, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1681467040
@@ -1615,7 +1615,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1919717889
 RectTransform:
   m_ObjectHideFlags: 0
